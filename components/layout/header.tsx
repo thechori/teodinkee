@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, Search, ShoppingBag, User, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,12 +13,13 @@ import { useMobile } from "@/hooks/use-mobile";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Products", href: "/products" },
-  { name: "Collections", href: "/collections" },
+  // { name: "Collections", href: "/collections" },
   { name: "Blog", href: "/blog" },
   { name: "About", href: "/about" }
 ];
 
 export default function Header() {
+  const pathname = usePathname();
   const isMobile = useMobile();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -30,10 +32,14 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  console.log("pathname: ", pathname);
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white shadow-md py-2" : "bg-transparent py-4"
+        isScrolled || pathname !== "/"
+          ? "bg-white shadow-md py-2"
+          : "bg-transparent py-4"
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,7 +48,9 @@ export default function Header() {
           <Link href="/" className="flex items-center">
             <span
               className={`font-serif text-2xl font-bold ${
-                isScrolled || isMobile ? "text-black" : "text-white"
+                isScrolled || isMobile || pathname !== "/"
+                  ? "text-black"
+                  : "text-white"
               }`}
             >
               Teodinkee
@@ -56,7 +64,7 @@ export default function Header() {
                 key={item.name}
                 href={item.href}
                 className={`text-sm font-medium transition-colors ${
-                  isScrolled
+                  isScrolled || pathname !== "/"
                     ? "text-gray-700 hover:text-black"
                     : "text-white/90 hover:text-white"
                 }`}
@@ -74,7 +82,9 @@ export default function Header() {
                 variant="ghost"
                 size="icon"
                 className={
-                  isScrolled || isMobile ? "text-gray-700" : "text-white"
+                  isScrolled || isMobile || pathname !== "/"
+                    ? "text-gray-700"
+                    : "text-white"
                 }
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
               >
@@ -108,7 +118,9 @@ export default function Header() {
               variant="ghost"
               size="icon"
               className={
-                isScrolled || isMobile ? "text-gray-700" : "text-white"
+                isScrolled || isMobile || pathname !== "/"
+                  ? "text-gray-700"
+                  : "text-white"
               }
               asChild
             >
@@ -123,7 +135,9 @@ export default function Header() {
               variant="ghost"
               size="icon"
               className={
-                isScrolled || isMobile ? "text-gray-700" : "text-white"
+                isScrolled || isMobile || pathname !== "/"
+                  ? "text-gray-700"
+                  : "text-white"
               }
               asChild
             >
@@ -145,7 +159,9 @@ export default function Header() {
                   variant="ghost"
                   size="icon"
                   className={`md:hidden ${
-                    isScrolled ? "text-gray-700" : "text-white"
+                    isScrolled || pathname !== "/"
+                      ? "text-gray-700"
+                      : "text-white"
                   }`}
                 >
                   <Menu className="h-5 w-5" />
