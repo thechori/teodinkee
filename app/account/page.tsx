@@ -111,7 +111,7 @@ export default function AccountPage() {
   };
 
   const handleRemoveWishlistItem = (id: number) => {
-    toast("Item removed", {
+    toast(`Item ${id} removed`, {
       description: "The item has been removed from your wishlist."
     });
   };

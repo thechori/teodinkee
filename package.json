@@ -1,5 +1,6 @@
 {
-  "name": "demo-platform-engineering-buildathon",
+  "name": "teodinkee",
+  "author": "Ryan Teodoro",
   "version": "0.1.0",
   "private": true,
   "scripts": {
