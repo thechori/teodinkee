@@ -39,10 +39,10 @@ export default function AboutPage() {
               The Teodinkee Journey
             </h2>
             <p className="text-lg text-gray-600">
-              Founded in 2010 by master watchmaker Thomas Dinkee, our company
+              Founded in 2025 by master watchmaker Ryan Teodoro, our company
               began with a simple mission: to create timepieces that honor
               traditional craftsmanship while embracing modern innovation. What
-              started as a small atelier in Geneva has grown into a respected
+              started as a small atelier in Houston has grown into a respected
               name in luxury horology, without ever compromising on our founding
               principles.
             </p>

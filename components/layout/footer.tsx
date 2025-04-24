@@ -10,7 +10,7 @@ export default function Footer() {
             <h3 className="font-serif text-2xl font-bold mb-4">Teodinkee</h3>
             <p className="text-gray-400 mb-4">
               Curating the finest timepieces for the discerning collector since
-              2010.
+              2025.
             </p>
             <div className="flex space-x-4">
               <Link
