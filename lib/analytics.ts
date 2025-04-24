@@ -1,7 +1,16 @@
 import { AnalyticsBrowser } from "@segment/analytics-next";
+//
+import env from "@/config/env.client";
 
-const writeKey = process.env.SEGMENT_WRITE_KEY;
+console.log(
+  "env.NEXT_PUBLIC_SEGMENT_WRITE_KEY: ",
+  env.NEXT_PUBLIC_SEGMENT_WRITE_KEY
+);
 
-if (!writeKey) throw Error("missing segment writeKey env var");
+export const analytics = AnalyticsBrowser.load({
+  writeKey: env.NEXT_PUBLIC_SEGMENT_WRITE_KEY
+});
 
-export const analytics = AnalyticsBrowser.load({ writeKey });
+export const segmentEvents = {
+  PRODUCT_VIEWED: "Product Viewed"
+};

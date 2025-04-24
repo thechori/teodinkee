@@ -2,7 +2,7 @@ import { Pool } from "pg";
 import { Kysely, PostgresDialect } from "kysely";
 //
 // import { DB } from "./types";
-import env from "../config/env";
+import env from "../config/env.server";
 
 const dialect = new PostgresDialect({
   pool: new Pool({

@@ -1,4 +1,6 @@
-const product = {
+import { ProductDetails } from "@/types";
+
+export const productDetails: ProductDetails = {
   id: 1,
   name: "Chronograph Master",
   brand: "Teodinkee",
@@ -47,6 +49,8 @@ const product = {
   relatedProducts: [
     {
       id: 2,
+      brand: "Tudor",
+      category: "Diver",
       name: "Diver Professional",
       price: 3200,
       image: "professional diving watch with black bezel",
@@ -54,6 +58,8 @@ const product = {
     },
     {
       id: 4,
+      brand: "Tour",
+      category: "Dress",
       name: "Grand Tourbillon",
       price: 12500,
       image: "luxury tourbillon watch with skeleton dial",
@@ -61,6 +67,8 @@ const product = {
     },
     {
       id: 5,
+      brand: "Rolex",
+      category: "Explorer",
       name: "Aqua Explorer",
       price: 4200,
       image: "blue dial diving watch with steel bracelet",
