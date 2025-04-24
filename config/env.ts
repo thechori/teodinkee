@@ -1,0 +1,42 @@
+const {
+  DATABASE_URL,
+  PGHOST,
+  PGUSER,
+  PGDATABASE,
+  PGPASSWORD,
+  PGPORT,
+  PGCERT,
+  TWILIO_SENDER_PHONE_NUMBER,
+  TWILIO_SID,
+  TWILIO_SECRET
+} = process.env;
+
+if (
+  !DATABASE_URL ||
+  !PGHOST ||
+  !PGUSER ||
+  !PGDATABASE ||
+  !PGPASSWORD ||
+  !PGPORT ||
+  !PGCERT ||
+  !TWILIO_SENDER_PHONE_NUMBER ||
+  !TWILIO_SID ||
+  !TWILIO_SECRET
+) {
+  throw Error("missing env var");
+}
+
+const env = {
+  DATABASE_URL,
+  PGHOST,
+  PGUSER,
+  PGDATABASE,
+  PGPASSWORD,
+  PGPORT,
+  PGCERT,
+  TWILIO_SENDER_PHONE_NUMBER,
+  TWILIO_SID,
+  TWILIO_SECRET
+};
+
+export default env;
