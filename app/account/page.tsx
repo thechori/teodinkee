@@ -1,0 +1,561 @@
+"use client";
+
+import type React from "react";
+
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Heart, Package, Settings, User } from "lucide-react";
+import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+
+// Mock user data
+const user = {
+  name: "Alexander Mitchell",
+  email: "alex.mitchell@example.com",
+  avatar: "professional male portrait with beard",
+  joined: "March 2022"
+};
+
+// Mock order data
+const orders = [
+  {
+    id: "ORD-7291",
+    date: "June 12, 2023",
+    status: "Delivered",
+    total: "$4,850.00",
+    items: [
+      {
+        name: "Chronograph Master",
+        image: "luxury chronograph watch with blue dial",
+        price: "$4,850.00"
+      }
+    ]
+  },
+  {
+    id: "ORD-6184",
+    date: "April 23, 2023",
+    status: "Delivered",
+    total: "$3,200.00",
+    items: [
+      {
+        name: "Diver Professional",
+        image: "professional diving watch with black bezel",
+        price: "$3,200.00"
+      }
+    ]
+  }
+];
+
+// Mock wishlist data
+const wishlist = [
+  {
+    id: 1,
+    name: "Grand Tourbillon",
+    price: "$12,500.00",
+    image: "luxury tourbillon watch with skeleton dial",
+    slug: "grand-tourbillon"
+  },
+  {
+    id: 2,
+    name: "Vintage Elegance",
+    price: "$3,800.00",
+    image: "vintage style watch with cream dial",
+    slug: "vintage-elegance"
+  },
+  {
+    id: 3,
+    name: "Skeleton Artisan",
+    price: "$7,500.00",
+    image: "skeleton dial watch showing movement",
+    slug: "skeleton-artisan"
+  }
+];
+
+export default function AccountPage() {
+  const [formData, setFormData] = useState({
+    firstName: "Alexander",
+    lastName: "Mitchell",
+    email: "alex.mitchell@example.com",
+    phone: "+1 (555) 123-4567",
+    address: "123 Park Avenue",
+    city: "New York",
+    state: "NY",
+    zipCode: "10001",
+    country: "United States"
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveChanges = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast("Changes saved", {
+      description: "Your profile information has been updated."
+    });
+  };
+
+  const handleRemoveWishlistItem = (id: number) => {
+    toast("Item removed", {
+      description: "The item has been removed from your wishlist."
+    });
+  };
+
+  return (
+    <div className="min-h-screen pt-24 pb-16">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Sidebar */}
+          <div className="md:w-1/4">
+            <div className="sticky top-24 space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="h-16 w-16 rounded-full overflow-hidden relative">
+                  <Image
+                    src={`/abstract-geometric-shapes.png?height=64&width=64&query=${user.avatar}`}
+                    alt={user.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div>
+                  <h2 className="font-medium text-lg">{user.name}</h2>
+                  <p className="text-sm text-gray-500">
+                    Member since {user.joined}
+                  </p>
+                </div>
+              </div>
+
+              <Tabs defaultValue="orders" className="w-full">
+                <TabsList className="grid grid-cols-4 md:grid-cols-1 h-auto gap-2">
+                  <TabsTrigger
+                    value="orders"
+                    className="flex items-center justify-start gap-2 py-2 md:py-3"
+                  >
+                    <Package className="h-4 w-4" />
+                    <span className="hidden md:inline">Orders</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="wishlist"
+                    className="flex items-center justify-start gap-2 py-2 md:py-3"
+                  >
+                    <Heart className="h-4 w-4" />
+                    <span className="hidden md:inline">Wishlist</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="profile"
+                    className="flex items-center justify-start gap-2 py-2 md:py-3"
+                  >
+                    <User className="h-4 w-4" />
+                    <span className="hidden md:inline">Profile</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="settings"
+                    className="flex items-center justify-start gap-2 py-2 md:py-3"
+                  >
+                    <Settings className="h-4 w-4" />
+                    <span className="hidden md:inline">Settings</span>
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+
+              <div className="hidden md:block">
+                <Button variant="outline" className="w-full">
+                  Sign Out
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="md:w-3/4">
+            <Tabs defaultValue="orders" className="w-full">
+              <TabsContent value="orders" className="mt-0">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Order History</CardTitle>
+                    <CardDescription>
+                      View and manage your orders
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {orders.length > 0 ? (
+                      <div className="space-y-6">
+                        {orders.map((order) => (
+                          <div
+                            key={order.id}
+                            className="border rounded-lg overflow-hidden"
+                          >
+                            <div className="bg-gray-50 p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium">
+                                    Order {order.id}
+                                  </span>
+                                  <span
+                                    className={`px-2 py-1 text-xs rounded-full ${
+                                      order.status === "Delivered"
+                                        ? "bg-green-100 text-green-800"
+                                        : "bg-blue-100 text-blue-800"
+                                    }`}
+                                  >
+                                    {order.status}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-gray-500">
+                                  Placed on {order.date}
+                                </p>
+                              </div>
+                              <div className="flex gap-2">
+                                <Button variant="outline" size="sm">
+                                  Track Order
+                                </Button>
+                                <Button variant="outline" size="sm">
+                                  View Details
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="p-4">
+                              {order.items.map((item, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-center gap-4"
+                                >
+                                  <div className="h-16 w-16 rounded-md overflow-hidden relative flex-shrink-0">
+                                    <Image
+                                      src={`/abstract-geometric-shapes.png?height=64&width=64&query=${item.image}`}
+                                      alt={item.name}
+                                      fill
+                                      className="object-cover"
+                                    />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="font-medium">{item.name}</h4>
+                                    <p className="text-sm text-gray-500">
+                                      {item.price}
+                                    </p>
+                                  </div>
+                                  <Button variant="outline" size="sm">
+                                    Buy Again
+                                  </Button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-12">
+                        <Package className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                        <h3 className="text-lg font-medium mb-2">
+                          No orders yet
+                        </h3>
+                        <p className="text-gray-500 mb-6">
+                          You haven't placed any orders yet.
+                        </p>
+                        <Button asChild>
+                          <Link href="/products">Start Shopping</Link>
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="wishlist" className="mt-0">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Wishlist</CardTitle>
+                    <CardDescription>
+                      Items you've saved for later
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {wishlist.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {wishlist.map((item) => (
+                          <div
+                            key={item.id}
+                            className="border rounded-lg overflow-hidden group"
+                          >
+                            <div className="aspect-square relative">
+                              <Image
+                                src={`/abstract-geometric-shapes.png?height=300&width=300&query=${item.image}`}
+                                alt={item.name}
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                              />
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm hover:bg-white rounded-full"
+                                onClick={() =>
+                                  handleRemoveWishlistItem(item.id)
+                                }
+                              >
+                                <Heart className="h-5 w-5 fill-red-500 text-red-500" />
+                                <span className="sr-only">
+                                  Remove from wishlist
+                                </span>
+                              </Button>
+                            </div>
+                            <div className="p-4">
+                              <Link href={`/products/${item.slug}`}>
+                                <h3 className="font-medium mb-1 group-hover:text-gray-700">
+                                  {item.name}
+                                </h3>
+                              </Link>
+                              <p className="text-gray-500 mb-3">{item.price}</p>
+                              <Button className="w-full">Add to Cart</Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-12">
+                        <Heart className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                        <h3 className="text-lg font-medium mb-2">
+                          Your wishlist is empty
+                        </h3>
+                        <p className="text-gray-500 mb-6">
+                          Save items you love to your wishlist.
+                        </p>
+                        <Button asChild>
+                          <Link href="/products">Explore Products</Link>
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="profile" className="mt-0">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Personal Information</CardTitle>
+                    <CardDescription>
+                      Manage your personal details
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleSaveChanges}>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="firstName">First Name</Label>
+                          <Input
+                            id="firstName"
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="lastName">Last Name</Label>
+                          <Input
+                            id="lastName"
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="email">Email</Label>
+                          <Input
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="phone">Phone</Label>
+                          <Input
+                            id="phone"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                      </div>
+
+                      <Separator className="my-6" />
+
+                      <h3 className="text-lg font-medium mb-4">
+                        Shipping Address
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2 md:col-span-2">
+                          <Label htmlFor="address">Address</Label>
+                          <Input
+                            id="address"
+                            name="address"
+                            value={formData.address}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="city">City</Label>
+                          <Input
+                            id="city"
+                            name="city"
+                            value={formData.city}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="state">State/Province</Label>
+                          <Input
+                            id="state"
+                            name="state"
+                            value={formData.state}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="zipCode">ZIP/Postal Code</Label>
+                          <Input
+                            id="zipCode"
+                            name="zipCode"
+                            value={formData.zipCode}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="country">Country</Label>
+                          <Input
+                            id="country"
+                            name="country"
+                            value={formData.country}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="mt-6">
+                        <Button type="submit">Save Changes</Button>
+                      </div>
+                    </form>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="settings" className="mt-0">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Account Settings</CardTitle>
+                    <CardDescription>
+                      Manage your account preferences
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      <h3 className="text-lg font-medium">Notifications</h3>
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium">Order updates</p>
+                            <p className="text-sm text-gray-500">
+                              Receive updates about your orders
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium">New products</p>
+                            <p className="text-sm text-gray-500">
+                              Be the first to know about new releases
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium">Blog posts</p>
+                            <p className="text-sm text-gray-500">
+                              Get notified about new articles
+                            </p>
+                          </div>
+                          <Switch />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium">Special offers</p>
+                            <p className="text-sm text-gray-500">
+                              Receive exclusive deals and promotions
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                      </div>
+
+                      <Separator />
+
+                      <h3 className="text-lg font-medium">Security</h3>
+                      <div className="space-y-4">
+                        <Button variant="outline">Change Password</Button>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium">
+                              Two-factor authentication
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              Add an extra layer of security to your account
+                            </p>
+                          </div>
+                          <Switch />
+                        </div>
+                      </div>
+
+                      <Separator />
+
+                      <h3 className="text-lg font-medium">Privacy</h3>
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium">Data sharing</p>
+                            <p className="text-sm text-gray-500">
+                              Allow us to use your data to improve our services
+                            </p>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium">Marketing preferences</p>
+                            <p className="text-sm text-gray-500">
+                              Allow us to share your information with partners
+                            </p>
+                          </div>
+                          <Switch />
+                        </div>
+                      </div>
+
+                      <div className="mt-6">
+                        <Button>Save Preferences</Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
