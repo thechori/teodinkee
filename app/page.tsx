@@ -5,6 +5,7 @@ import { ArrowRight, Clock, Package, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FeaturedProducts from "@/components/product/featured-products";
 import NewsletterSignup from "@/components/newsletter-signup";
+import { collections } from "@/data/collections";
 
 export default function HomePage() {
   return (
@@ -57,23 +58,7 @@ export default function HomePage() {
             Explore Our Collections
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Luxury",
-                image: "luxury watch with gold details",
-                description: "Timeless elegance for the discerning collector"
-              },
-              {
-                name: "Sport",
-                image: "sporty chronograph watch",
-                description: "Precision engineering for the active lifestyle"
-              },
-              {
-                name: "Classic",
-                image: "classic minimalist watch",
-                description: "Understated sophistication for everyday wear"
-              }
-            ].map((category) => (
+            {collections.map((category) => (
               <Link
                 href={`/products?category=${category.name.toLowerCase()}`}
                 key={category.name}
@@ -81,7 +66,7 @@ export default function HomePage() {
               >
                 <div className="aspect-[4/5] relative">
                   <Image
-                    src={`/abstract-geometric-shapes.png?height=600&width=480&query=${category.image}`}
+                    src={`${category.imgUrl}?height=600&width=480`}
                     alt={category.name}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"

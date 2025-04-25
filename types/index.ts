@@ -1,3 +1,10 @@
+export type Collection = {
+  name: string;
+  description: string;
+  imgAlt: string;
+  imgUrl: string;
+};
+
 export type Product = {
   id: number;
   name: string;
@@ -6,6 +13,7 @@ export type Product = {
   image: string;
   slug: string;
   category: string;
+  imgUrl: string;
 };
 
 export type ProductSpecifications = {
