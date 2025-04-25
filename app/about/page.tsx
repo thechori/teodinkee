@@ -157,10 +157,11 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                name: "Thomas Dinkee",
+                name: "Ryan Teodoro",
                 title: "Founder & Master Watchmaker",
-                bio: "With over 30 years of experience in haute horlogerie, Thomas founded Teodinkee to create timepieces that blend traditional craftsmanship with contemporary design.",
-                image: "professional older man with glasses in workshop"
+                bio: "With under 1 year of experience in haute horlogerie, Ryan founded Teodinkee to create timepieces that blend traditional craftsmanship with contemporary design.",
+                image: "professional older man with glasses in workshop",
+                imgUrl: "https://ryanteodoro.com/images/headshot.png"
               },
               {
                 name: "Elena Rousseau",
@@ -181,7 +182,9 @@ export default function AboutPage() {
               >
                 <div className="aspect-square relative rounded-full overflow-hidden w-32 h-32 mx-auto mb-6">
                   <Image
-                    src={`/abstract-geometric-shapes.png?height=128&width=128&query=${member.image}`}
+                    src={`${
+                      member.imgUrl || "/abstract-geometric-shapes.png"
+                    }?height=128&width=128&query=${member.image}`}
                     alt={member.name}
                     fill
                     className="object-cover"
