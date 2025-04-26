@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { Kysely, PostgresDialect } from "kysely";
 //
-// import { DB } from "./types";
+import { DB } from "./types";
 import env from "../config/env.server";
 
 const dialect = new PostgresDialect({
@@ -19,6 +19,6 @@ const dialect = new PostgresDialect({
 });
 
 // TODO: apply type after initial DB introspection
-export const db = new Kysely<any>({
+export const db = new Kysely<DB>({
   dialect
 });

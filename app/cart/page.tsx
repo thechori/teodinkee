@@ -6,7 +6,6 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
 
 // Mock cart data
 const initialCartItems = [
@@ -66,11 +66,11 @@ export default function CartPage() {
 
     // Simulate promo code validation
     if (promoCode.toLowerCase() === "welcome10") {
-      toast("Promo code applied", {
+      toast.success("Promo code applied", {
         description: "10% discount has been applied to your order."
       });
     } else {
-      toast("Invalid promo code", {
+      toast.error("Invalid promo code", {
         description: "The promo code you entered is invalid or expired."
       });
     }

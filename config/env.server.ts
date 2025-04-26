@@ -8,7 +8,9 @@ const {
   PGCERT,
   TWILIO_SENDER_PHONE_NUMBER,
   TWILIO_SID,
-  TWILIO_SECRET
+  TWILIO_SECRET,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET
 } = process.env;
 
 if (
@@ -21,7 +23,9 @@ if (
   !PGCERT ||
   !TWILIO_SENDER_PHONE_NUMBER ||
   !TWILIO_SID ||
-  !TWILIO_SECRET
+  !TWILIO_SECRET ||
+  !GOOGLE_CLIENT_ID ||
+  !GOOGLE_CLIENT_SECRET
 ) {
   throw Error("missing env var");
 }
@@ -36,7 +40,9 @@ const env = {
   PGCERT,
   TWILIO_SENDER_PHONE_NUMBER,
   TWILIO_SID,
-  TWILIO_SECRET
+  TWILIO_SECRET,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET
 };
 
 export default env;

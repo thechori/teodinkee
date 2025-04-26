@@ -2,10 +2,10 @@ import type React from "react";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
-//
-// import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import { SessionProvider } from "@/components/auth/session-provider";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,11 +31,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${playfair.variable} font-sans`}>
-        {/* <ThemeProvider attribute="class" defaultTheme="light"> */}
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        {/* </ThemeProvider> */}
+        <SessionProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+          <Toaster position="bottom-right" />
+        </SessionProvider>
       </body>
     </html>
   );

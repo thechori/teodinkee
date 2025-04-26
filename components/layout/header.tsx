@@ -2,27 +2,35 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, Search, ShoppingBag, User, X } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { Menu, Search, ShoppingBag, User, X, LogOut } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useMobile } from "@/hooks/use-mobile";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Products", href: "/products" },
-  // { name: "Collections", href: "/collections" },
+  { name: "Collections", href: "/collections" },
   { name: "Blog", href: "/blog" },
   { name: "About", href: "/about" }
 ];
 
 export default function Header() {
-  const pathname = usePathname();
   const isMobile = useMobile();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,14 +40,22 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  console.log("pathname: ", pathname);
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: "/" });
+  };
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+  };
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled || pathname !== "/"
-          ? "bg-white shadow-md py-2"
-          : "bg-transparent py-4"
+        isScrolled ? "bg-white shadow-md py-2" : "bg-transparent py-4"
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,9 +64,7 @@ export default function Header() {
           <Link href="/" className="flex items-center">
             <span
               className={`font-serif text-2xl font-bold ${
-                isScrolled || isMobile || pathname !== "/"
-                  ? "text-black"
-                  : "text-white"
+                isScrolled || isMobile ? "text-black" : "text-white"
               }`}
             >
               Teodinkee
@@ -64,7 +78,7 @@ export default function Header() {
                 key={item.name}
                 href={item.href}
                 className={`text-sm font-medium transition-colors ${
-                  isScrolled || pathname !== "/"
+                  isScrolled
                     ? "text-gray-700 hover:text-black"
                     : "text-white/90 hover:text-white"
                 }`}
@@ -82,9 +96,7 @@ export default function Header() {
                 variant="ghost"
                 size="icon"
                 className={
-                  isScrolled || isMobile || pathname !== "/"
-                    ? "text-gray-700"
-                    : "text-white"
+                  isScrolled || isMobile ? "text-gray-700" : "text-white"
                 }
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
               >
@@ -114,30 +126,85 @@ export default function Header() {
             </div>
 
             {/* Account */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className={
-                isScrolled || isMobile || pathname !== "/"
-                  ? "text-gray-700"
-                  : "text-white"
-              }
-              asChild
-            >
-              <Link href="/account">
-                <User className="h-5 w-5" />
-                <span className="sr-only">Account</span>
-              </Link>
-            </Button>
+            {session ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={
+                      isScrolled || isMobile ? "text-gray-700" : "text-white"
+                    }
+                  >
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage
+                        src={session.user?.image || ""}
+                        alt={session.user?.name || ""}
+                      />
+                      <AvatarFallback>
+                        {session.user?.name
+                          ? getInitials(session.user.name)
+                          : "TD"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="sr-only">Account</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <div className="flex items-center justify-start gap-2 p-2">
+                    <div className="flex flex-col space-y-1 leading-none">
+                      {session.user?.name && (
+                        <p className="font-medium">{session.user.name}</p>
+                      )}
+                      {session.user?.email && (
+                        <p className="w-[200px] truncate text-sm text-gray-500">
+                          {session.user.email}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/account">Account</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/account?tab=orders">Orders</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/account?tab=wishlist">Wishlist</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={handleSignOut}
+                    className="text-red-600 cursor-pointer"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon"
+                className={
+                  isScrolled || isMobile ? "text-gray-700" : "text-white"
+                }
+                asChild
+              >
+                <Link href="/auth/signin">
+                  <User className="h-5 w-5" />
+                  <span className="sr-only">Sign in</span>
+                </Link>
+              </Button>
+            )}
 
             {/* Cart */}
             <Button
               variant="ghost"
               size="icon"
               className={
-                isScrolled || isMobile || pathname !== "/"
-                  ? "text-gray-700"
-                  : "text-white"
+                isScrolled || isMobile ? "text-gray-700" : "text-white"
               }
               asChild
             >
@@ -159,9 +226,7 @@ export default function Header() {
                   variant="ghost"
                   size="icon"
                   className={`md:hidden ${
-                    isScrolled || pathname !== "/"
-                      ? "text-gray-700"
-                      : "text-white"
+                    isScrolled ? "text-gray-700" : "text-white"
                   }`}
                 >
                   <Menu className="h-5 w-5" />
@@ -179,6 +244,21 @@ export default function Header() {
                       {item.name}
                     </Link>
                   ))}
+                  {!session ? (
+                    <Link
+                      href="/auth/signin"
+                      className="text-lg font-medium py-2 border-b border-gray-100"
+                    >
+                      Sign In
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={handleSignOut}
+                      className="text-lg font-medium py-2 border-b border-gray-100 text-left text-red-600"
+                    >
+                      Sign Out
+                    </button>
+                  )}
                 </nav>
               </SheetContent>
             </Sheet>

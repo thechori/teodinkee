@@ -2,11 +2,12 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, Package, Settings, User } from "lucide-react";
-import { toast } from "sonner";
+import { Heart, Package, Settings, User, LogIn } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,14 +22,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-
-// Mock user data
-const user = {
-  name: "Alexander Mitchell",
-  email: "alex.mitchell@example.com",
-  avatar: "professional male portrait with beard",
-  joined: "March 2022"
-};
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { toast } from "sonner";
 
 // Mock order data
 const orders = [
@@ -86,17 +81,50 @@ const wishlist = [
 ];
 
 export default function AccountPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+
+  const [activeTab, setActiveTab] = useState("orders");
   const [formData, setFormData] = useState({
-    firstName: "Alexander",
-    lastName: "Mitchell",
-    email: "alex.mitchell@example.com",
-    phone: "+1 (555) 123-4567",
-    address: "123 Park Avenue",
-    city: "New York",
-    state: "NY",
-    zipCode: "10001",
-    country: "United States"
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: ""
   });
+
+  useEffect(() => {
+    if (
+      tabParam &&
+      ["orders", "wishlist", "profile", "settings"].includes(tabParam)
+    ) {
+      setActiveTab(tabParam);
+    }
+  }, [tabParam]);
+
+  useEffect(() => {
+    // Redirect to sign in if not authenticated
+    if (status === "unauthenticated") {
+      router.push("/auth/signin");
+    }
+
+    // Populate form data with user information if available
+    if (session?.user) {
+      const nameParts = (session.user.name || "").split(" ");
+      setFormData((prev) => ({
+        ...prev,
+        firstName: nameParts[0] || "",
+        lastName: nameParts.slice(1).join(" ") || "",
+        email: session.user?.email || ""
+      }));
+    }
+  }, [session, status, router]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -105,16 +133,61 @@ export default function AccountPage() {
 
   const handleSaveChanges = (e: React.FormEvent) => {
     e.preventDefault();
-    toast("Changes saved", {
+    toast.success("Changes saved", {
       description: "Your profile information has been updated."
     });
   };
 
   const handleRemoveWishlistItem = (id: number) => {
-    toast(`Item ${id} removed`, {
+    toast("Item removed", {
       description: "The item has been removed from your wishlist."
     });
   };
+
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: "/" });
+    toast.success("Signed out", {
+      description: "You have been signed out successfully."
+    });
+  };
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+  };
+
+  // Show loading state
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen pt-24 pb-16 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your account...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show sign in prompt if not authenticated
+  if (status === "unauthenticated") {
+    return (
+      <div className="min-h-screen pt-24 pb-16 flex items-center justify-center">
+        <div className="text-center">
+          <LogIn className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+          <h2 className="text-2xl font-medium mb-2">Sign in required</h2>
+          <p className="text-gray-500 mb-6">
+            Please sign in to access your account.
+          </p>
+          <Button asChild>
+            <Link href="/auth/signin">Sign In</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -124,23 +197,30 @@ export default function AccountPage() {
           <div className="md:w-1/4">
             <div className="sticky top-24 space-y-6">
               <div className="flex items-center gap-4">
-                <div className="h-16 w-16 rounded-full overflow-hidden relative">
-                  <Image
-                    src={`/abstract-geometric-shapes.png?height=64&width=64&query=${user.avatar}`}
-                    alt={user.name}
-                    fill
-                    className="object-cover"
+                <Avatar className="h-16 w-16">
+                  <AvatarImage
+                    src={session?.user?.image || ""}
+                    alt={session?.user?.name || ""}
                   />
-                </div>
+                  <AvatarFallback className="text-lg">
+                    {session?.user?.name
+                      ? getInitials(session.user.name)
+                      : "TD"}
+                  </AvatarFallback>
+                </Avatar>
                 <div>
-                  <h2 className="font-medium text-lg">{user.name}</h2>
+                  <h2 className="font-medium text-lg">{session?.user?.name}</h2>
                   <p className="text-sm text-gray-500">
-                    Member since {user.joined}
+                    {session?.user?.email}
                   </p>
                 </div>
               </div>
 
-              <Tabs defaultValue="orders" className="w-full">
+              <Tabs
+                value={activeTab}
+                onValueChange={setActiveTab}
+                className="w-full"
+              >
                 <TabsList className="grid grid-cols-4 md:grid-cols-1 h-auto gap-2">
                   <TabsTrigger
                     value="orders"
@@ -174,7 +254,11 @@ export default function AccountPage() {
               </Tabs>
 
               <div className="hidden md:block">
-                <Button variant="outline" className="w-full">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleSignOut}
+                >
                   Sign Out
                 </Button>
               </div>
@@ -183,7 +267,11 @@ export default function AccountPage() {
 
           {/* Main Content */}
           <div className="md:w-3/4">
-            <Tabs defaultValue="orders" className="w-full">
+            <Tabs
+              value={activeTab}
+              onValueChange={setActiveTab}
+              className="w-full"
+            >
               <TabsContent value="orders" className="mt-0">
                 <Card>
                   <CardHeader>
