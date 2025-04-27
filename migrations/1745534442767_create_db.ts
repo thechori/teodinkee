@@ -32,26 +32,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("image_url", "text", (col) => col.notNull())
     .addColumn("image_alt", "text")
     .addColumn("description", "text")
-    .execute();
-
-  // Create product_details table
-  await db.schema
-    .createTable("product_details")
-    .addColumn("id", "serial", (col) => col.primaryKey())
-    .addColumn("product_id", "integer", (col) =>
-      col.references("products.id").onDelete("cascade").notNull().unique()
-    )
     .addColumn("features", sql`text[]`)
     .addColumn("images", sql`text[]`)
-    .execute();
-
-  // Create product_specifications table
-  await db.schema
-    .createTable("product_specifications")
-    .addColumn("id", "serial", (col) => col.primaryKey())
-    .addColumn("product_id", "integer", (col) =>
-      col.references("products.id").onDelete("cascade").notNull().unique()
-    )
     .addColumn("case_diameter", "varchar(255)")
     .addColumn("case_thickness", "varchar(255)")
     .addColumn("case_material", "varchar(255)")
@@ -63,31 +45,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("bracelet_or_strap", "varchar(255)")
     .addColumn("clasp", "varchar(255)")
     .addColumn("functions", "text")
-    .execute();
-
-  // Create product_review_summary table
-  await db.schema
-    .createTable("product_review_summary")
-    .addColumn("id", "serial", (col) => col.primaryKey())
-    .addColumn("product_id", "integer", (col) =>
-      col.references("products.id").onDelete("cascade").notNull().unique()
-    )
-    .addColumn("average", sql`decimal(3,2)`, (col) =>
-      col.notNull().defaultTo(0)
-    )
-    .addColumn("count", "integer", (col) => col.notNull().defaultTo(0))
-    .execute();
-
-  // Create product_review_breakdown table
-  await db.schema
-    .createTable("product_review_breakdown")
-    .addColumn("id", "serial", (col) => col.primaryKey())
-    .addColumn("summary_id", "integer", (col) =>
-      col.references("product_review_summary.id").onDelete("cascade").notNull()
-    )
-    .addColumn("rating", "integer", (col) => col.notNull())
-    .addColumn("percentage", sql`decimal(5,2)`, (col) => col.notNull())
-    .addUniqueConstraint("summary_rating_unique", ["summary_id", "rating"])
     .execute();
 
   // Create product_reviews table
@@ -242,10 +199,6 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable("collection_products").execute();
   await db.schema.dropTable("collections").execute();
   await db.schema.dropTable("product_reviews").execute();
-  await db.schema.dropTable("product_review_breakdown").execute();
-  await db.schema.dropTable("product_review_summary").execute();
-  await db.schema.dropTable("product_specifications").execute();
-  await db.schema.dropTable("product_details").execute();
   await db.schema.dropTable("products").execute();
   await db.schema.dropTable("users").execute();
 

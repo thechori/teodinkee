@@ -2,7 +2,7 @@ import { Kysely, sql } from "kysely";
 import { DB } from "kysely-codegen";
 
 export async function seed(db: Kysely<DB>) {
-  // Clean up in case of rerun (for dev/testing purposes)
+  // Clean tables
   await db.deleteFrom("related_blog_posts").execute();
   await db.deleteFrom("blog_posts").execute();
   await db.deleteFrom("blog_authors").execute();
@@ -12,13 +12,10 @@ export async function seed(db: Kysely<DB>) {
   await db.deleteFrom("collection_products").execute();
   await db.deleteFrom("collections").execute();
   await db.deleteFrom("product_reviews").execute();
-  await db.deleteFrom("product_review_breakdown").execute();
-  await db.deleteFrom("product_review_summary").execute();
-  await db.deleteFrom("product_specifications").execute();
-  await db.deleteFrom("product_details").execute();
   await db.deleteFrom("products").execute();
   await db.deleteFrom("users").execute();
 
+  // Insert user
   const [user] = await db
     .insertInto("users")
     .values({
@@ -30,6 +27,7 @@ export async function seed(db: Kysely<DB>) {
     .returningAll()
     .execute();
 
+  // Insert products
   const [product] = await db
     .insertInto("products")
     .values({
@@ -40,7 +38,21 @@ export async function seed(db: Kysely<DB>) {
       category: "Dive Watches",
       image_url: "https://example.com/submariner.jpg",
       image_alt: "Rolex Submariner",
-      description: "Iconic diver's watch by Rolex."
+      description: "Iconic diver's watch by Rolex.",
+      // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
+      features: sql`ARRAY['Water Resistant', 'Ceramic Bezel']`,
+      images: sql`ARRAY['https://example.com/submariner1.jpg', 'https://example.com/submariner2.jpg']`,
+      case_diameter: "40mm",
+      case_thickness: "12.5mm",
+      case_material: "Stainless Steel",
+      dial_color: "Black",
+      crystal: "Sapphire",
+      movement: "Automatic",
+      power_reserve: "48 hours",
+      water_resistance: "300m",
+      bracelet_or_strap: "Oystersteel Bracelet",
+      clasp: "Folding",
+      functions: "Date, Rotating Bezel"
     })
     .returningAll()
     .execute();
@@ -55,54 +67,23 @@ export async function seed(db: Kysely<DB>) {
       category: "Dive Watches",
       image_url: "https://example.com/seamaster.jpg",
       image_alt: "Omega Seamaster",
-      description: "Renowned diving watch by Omega."
-    })
-    .returningAll()
-    .execute();
-
-  await db
-    .insertInto("product_details")
-    .values({
-      product_id: product.id,
-      features: sql`ARRAY['Water Resistant', 'Ceramic Bezel']`,
-      images: sql`ARRAY['https://example.com/submariner1.jpg', 'https://example.com/submariner2.jpg']`
-    })
-    .execute();
-
-  await db
-    .insertInto("product_specifications")
-    .values({
-      product_id: product.id,
-      case_diameter: "40mm",
-      case_thickness: "12.5mm",
+      description: "Renowned diving watch by Omega.",
+      // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
+      features: sql`ARRAY['Wave Dial', 'Helium Escape Valve']`,
+      images: sql`ARRAY['https://example.com/seamaster1.jpg', 'https://example.com/seamaster2.jpg']`,
+      case_diameter: "42mm",
+      case_thickness: "13.5mm",
       case_material: "Stainless Steel",
-      dial_color: "Black",
+      dial_color: "Blue",
       crystal: "Sapphire",
       movement: "Automatic",
-      power_reserve: "48 hours",
+      power_reserve: "55 hours",
       water_resistance: "300m",
-      bracelet_or_strap: "Oystersteel Bracelet",
-      clasp: "Folding",
+      bracelet_or_strap: "Stainless Bracelet",
+      clasp: "Foldover",
       functions: "Date, Rotating Bezel"
     })
-    .execute();
-
-  const [summary] = await db
-    .insertInto("product_review_summary")
-    .values({
-      product_id: product.id,
-      average: 4.8,
-      count: 10
-    })
     .returningAll()
-    .execute();
-
-  await db
-    .insertInto("product_review_breakdown")
-    .values([
-      { summary_id: summary.id, rating: 5, percentage: 80.0 },
-      { summary_id: summary.id, rating: 4, percentage: 20.0 }
-    ])
     .execute();
 
   await db
@@ -116,6 +97,7 @@ export async function seed(db: Kysely<DB>) {
     })
     .execute();
 
+  // Collections
   const [collection] = await db
     .insertInto("collections")
     .values({
@@ -135,6 +117,7 @@ export async function seed(db: Kysely<DB>) {
     })
     .execute();
 
+  // Order
   const [order] = await db
     .insertInto("orders")
     .values({
@@ -157,6 +140,7 @@ export async function seed(db: Kysely<DB>) {
     })
     .execute();
 
+  // Blog
   const [author] = await db
     .insertInto("blog_authors")
     .values({
@@ -215,5 +199,5 @@ export async function seed(db: Kysely<DB>) {
     })
     .execute();
 
-  console.log("✅ Seed data inserted successfully.");
+  console.log("✅ MVP seed data inserted successfully.");
 }
