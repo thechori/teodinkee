@@ -13,8 +13,8 @@ type Product = {
   name: string;
   brand: string;
   price: number;
-  image_url: string;
-  image_alt: string | null;
+  img_url: string;
+  img_alt: string | null;
   slug: string;
 };
 
@@ -27,7 +27,7 @@ export default function FeaturedProducts() {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const response = await fetch("/api/products?featured=true&limit=4");
+        const response = await fetch("/api/products");
         if (!response.ok) throw new Error("Failed to fetch products");
         const data = await response.json();
         setProducts(data.products);
@@ -79,8 +79,8 @@ export default function FeaturedProducts() {
           <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-4">
             <Link href={`/products/${product.slug}`}>
               <Image
-                src={product.image_url || "/placeholder.svg"}
-                alt={product.image_alt || product.name}
+                src={product.img_url || "/placeholder.svg"}
+                alt={product.img_alt || product.name}
                 width={600}
                 height={600}
                 className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"

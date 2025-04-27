@@ -43,7 +43,7 @@ export async function GET(
       .select([
         "products.id",
         "products.name",
-        "products.image_url",
+        "products.img_url",
         "products.slug",
         "order_products.quantity",
         "order_products.price_at_purchase_in_cents"

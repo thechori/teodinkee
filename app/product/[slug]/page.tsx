@@ -27,8 +27,8 @@ async function getProduct(slug: string) {
         "brand",
         "price",
         "description",
-        "image_url",
-        "image_alt",
+        "img_url",
+        "img_alt",
         "slug",
         "category",
         "features",
@@ -112,7 +112,7 @@ async function getProduct(slug: string) {
     return {
       ...product,
       features: product.features || [],
-      images: product.images || [product.image_url],
+      images: product.images || [product.img_url],
       specifications,
       reviews: {
         items: reviews,
@@ -138,7 +138,7 @@ export default async function ProductDetailPage({
     notFound();
   }
 
-  const productImages = product.images || [product.image_url];
+  const productImages = product.images || [product.img_url];
   const features = product.features || [];
 
   return (

@@ -11,8 +11,8 @@ async function getProducts() {
         "name",
         "brand",
         "price",
-        "image_url",
-        "image_alt",
+        "img_url",
+        "img_alt",
         "slug",
         "category"
       ])
@@ -39,8 +39,8 @@ export default async function ProductsGrid() {
         >
           <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-4">
             <Image
-              src={product.image_url || "/placeholder.svg"}
-              alt={product.image_alt || product.name}
+              src={product.img_url || "/placeholder.svg"}
+              alt={product.img_alt || product.name}
               width={600}
               height={600}
               className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"

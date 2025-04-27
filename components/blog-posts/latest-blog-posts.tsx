@@ -14,8 +14,7 @@ const LatestBlogPosts = () => {
   useEffect(() => {
     const loadBlogPosts = async () => {
       try {
-        const response = await fetch("/api/blog?limit=4");
-        // const response = await fetch("/api/blog?featured=true&limit=4");
+        const response = await fetch("/api/blog");
         if (!response.ok) throw new Error("Failed to fetch blogPosts");
         const data = await response.json();
         console.log("data", data);
@@ -43,7 +42,7 @@ const LatestBlogPosts = () => {
           >
             <div className="aspect-[16/9] relative">
               <Image
-                src={`/abstract-geometric-shapes.png?height=400&width=600&query=${post.image_url}`}
+                src={`/abstract-geometric-shapes.png?height=400&width=600&query=${post.img_url}`}
                 alt={post.title}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-105"

@@ -36,9 +36,9 @@ export async function seed(db: Kysely<DB>) {
       price: 1299999,
       slug: "rolex-submariner",
       category: "Dive Watches",
-      image_url:
+      img_url:
         "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
-      image_alt: "Rolex Submariner",
+      img_alt: "Rolex Submariner",
       description: "Iconic diver's watch by Rolex.",
       // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
       features: sql`ARRAY['Water Resistant', 'Ceramic Bezel']`,
@@ -66,9 +66,9 @@ export async function seed(db: Kysely<DB>) {
       price: 899999,
       slug: "omega-seamaster",
       category: "Dive Watches",
-      image_url:
+      img_url:
         "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
-      image_alt: "Omega Seamaster",
+      img_alt: "Omega Seamaster",
       description: "Renowned diving watch by Omega.",
       // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
       features: sql`ARRAY['Wave Dial', 'Helium Escape Valve']`,
@@ -105,7 +105,8 @@ export async function seed(db: Kysely<DB>) {
     .values({
       name: "Luxury Dive Watches",
       description: "Best dive watches in the market",
-      img_url: "https://example.com/collection.jpg",
+      img_url:
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/collection-divers-yFFBtE3QdRjst3teACszuf8XafEgKF.png",
       img_alt: "Dive Watch Collection"
     })
     .returningAll()
@@ -148,7 +149,8 @@ export async function seed(db: Kysely<DB>) {
     .values({
       name: "Watch Guru",
       bio: "Longtime collector and writer.",
-      image: "https://example.com/author.jpg"
+      img_url: "https://ryanteodoro.com/images/headshot.png",
+      img_alt: "picture of auther"
     })
     .returningAll()
     .execute();
@@ -160,8 +162,8 @@ export async function seed(db: Kysely<DB>) {
       slug: "top-dive-watches-2025",
       excerpt: "We reviewed the best dive watches...",
       content: "Here’s our deep dive into dive watches...",
-      image_alt: "Dive Watch",
-      image_url:
+      img_alt: "Dive Watch",
+      img_url:
         "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
       author_id: author.id,
       category: "Reviews",
@@ -177,8 +179,8 @@ export async function seed(db: Kysely<DB>) {
       slug: "best-watches-under-1000",
       excerpt: "Affordable yet stylish timepieces.",
       content: "A roundup of the best budget watches...",
-      image_alt: "Affordable Watch",
-      image_url:
+      img_alt: "Affordable Watch",
+      img_url:
         "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
       author_id: author.id,
       category: "Buying Guides",

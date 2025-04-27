@@ -17,8 +17,8 @@ export async function GET(
         "brand",
         "price",
         "description",
-        "image_url",
-        "image_alt",
+        "img_url",
+        "img_alt",
         "slug",
         "category",
         "features",
@@ -95,7 +95,7 @@ export async function GET(
       relatedProductIds.length > 0
         ? await db
             .selectFrom("products")
-            .select(["id", "name", "price", "image_url", "image_alt", "slug"])
+            .select(["id", "name", "price", "img_url", "img_alt", "slug"])
             .where(
               "id",
               "in",
@@ -125,12 +125,12 @@ export async function GET(
       brand: product.brand,
       price: product.price,
       description: product.description,
-      image_url: product.image_url,
-      image_alt: product.image_alt,
+      img_url: product.img_url,
+      img_alt: product.img_alt,
       slug: product.slug,
       category: product.category,
       features: product.features || [],
-      images: product.images || [product.image_url],
+      images: product.images || [product.img_url],
       specifications,
       reviews: {
         items: reviews,

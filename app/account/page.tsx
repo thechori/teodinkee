@@ -28,7 +28,7 @@ import { toast } from "sonner";
 type OrderItem = {
   id: number;
   name: string;
-  image_url: string;
+  img_url: string;
   slug: string;
   quantity: number;
   price_at_purchase_in_cents: number;
@@ -47,7 +47,7 @@ type WishlistItem = {
   id: number;
   name: string;
   price: number;
-  image_url: string;
+  img_url: string;
   slug: string;
 };
 
@@ -141,7 +141,7 @@ export default function AccountPage() {
             id: 1,
             name: "Grand Tourbillon",
             price: 12500,
-            image_url:
+            img_url:
               "/abstract-geometric-shapes.png?height=300&width=300&query=luxury tourbillon watch with skeleton dial",
             slug: "grand-tourbillon"
           },
@@ -149,7 +149,7 @@ export default function AccountPage() {
             id: 2,
             name: "Vintage Elegance",
             price: 3800,
-            image_url:
+            img_url:
               "/abstract-geometric-shapes.png?height=300&width=300&query=vintage style watch with cream dial",
             slug: "vintage-elegance"
           },
@@ -157,7 +157,7 @@ export default function AccountPage() {
             id: 3,
             name: "Skeleton Artisan",
             price: 7500,
-            image_url:
+            img_url:
               "/abstract-geometric-shapes.png?height=300&width=300&query=skeleton dial watch showing movement",
             slug: "skeleton-artisan"
           }
@@ -379,7 +379,7 @@ export default function AccountPage() {
                                 >
                                   <div className="h-16 w-16 rounded-md overflow-hidden relative flex-shrink-0">
                                     <Image
-                                      src={item.image_url || "/placeholder.svg"}
+                                      src={item.img_url || "/placeholder.svg"}
                                       alt={item.name}
                                       fill
                                       className="object-cover"
@@ -446,7 +446,7 @@ export default function AccountPage() {
                           >
                             <div className="aspect-square relative">
                               <Image
-                                src={item.image_url || "/placeholder.svg"}
+                                src={item.img_url || "/placeholder.svg"}
                                 alt={item.name}
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-105"

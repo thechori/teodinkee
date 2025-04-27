@@ -38,8 +38,8 @@ export async function GET(
               "name",
               "brand",
               "price",
-              "image_url",
-              "image_alt",
+              "img_url",
+              "img_alt",
               "slug",
               "category"
             ])

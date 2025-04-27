@@ -29,8 +29,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("price", "integer", (col) => col.notNull()) // Price in cents
     .addColumn("slug", "varchar(255)", (col) => col.notNull().unique())
     .addColumn("category", "varchar(255)", (col) => col.notNull())
-    .addColumn("image_url", "text", (col) => col.notNull())
-    .addColumn("image_alt", "text")
+    .addColumn("img_url", "text", (col) => col.notNull())
+    .addColumn("img_alt", "text")
     .addColumn("description", "text")
     .addColumn("features", sql`text[]`)
     .addColumn("images", sql`text[]`)
@@ -145,7 +145,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("id", "serial", (col) => col.primaryKey())
     .addColumn("name", "varchar(255)", (col) => col.notNull())
     .addColumn("bio", "text")
-    .addColumn("image", "text")
+    .addColumn("img_url", "text")
+    .addColumn("img_alt", "text")
     .execute();
 
   // Create blog_posts table
@@ -156,8 +157,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("slug", "varchar(255)", (col) => col.notNull().unique())
     .addColumn("excerpt", "text")
     .addColumn("content", "text", (col) => col.notNull())
-    .addColumn("image_alt", "text")
-    .addColumn("image_url", "text")
+    .addColumn("img_alt", "text")
+    .addColumn("img_url", "text")
     .addColumn("author_id", "integer", (col) =>
       col.references("blog_authors.id").onDelete("set null")
     )
@@ -168,30 +169,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     )
     .addColumn("featured", "boolean", (col) => col.defaultTo(false))
     .execute();
-
-  // Create related_blog_posts junction table
-  await db.schema
-    .createTable("related_blog_posts")
-    .addColumn("blog_post_id", "integer", (col) =>
-      col.references("blog_posts.id").onDelete("cascade").notNull()
-    )
-    .addColumn("related_post_id", "integer", (col) =>
-      col.references("blog_posts.id").onDelete("cascade").notNull()
-    )
-    .addPrimaryKeyConstraint("related_blog_posts_pkey", [
-      "blog_post_id",
-      "related_post_id"
-    ])
-    .addCheckConstraint(
-      "different_posts_check",
-      sql`blog_post_id <> related_post_id`
-    )
-    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
   // Drop tables in reverse order to avoid foreign key constraints
-  await db.schema.dropTable("related_blog_posts").execute();
   await db.schema.dropTable("blog_posts").execute();
   await db.schema.dropTable("blog_authors").execute();
   await db.schema.dropTable("order_products").execute();
