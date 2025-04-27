@@ -31,7 +31,13 @@ export async function GET(
       .limit(3)
       .execute();
 
-    return NextResponse.json({ products: relatedProducts });
+    // Format prices from cents to dollars
+    const formattedProducts = relatedProducts.map((product) => ({
+      ...product,
+      price: product.price / 100
+    }));
+
+    return NextResponse.json({ products: formattedProducts });
   } catch (error) {
     console.error("Error fetching related products:", error);
     return NextResponse.json(

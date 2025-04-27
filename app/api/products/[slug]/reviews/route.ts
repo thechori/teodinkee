@@ -114,9 +114,6 @@ export async function POST(
       ])
       .executeTakeFirst();
 
-    // Update review summary
-    await updateReviewSummary(product.id);
-
     return NextResponse.json(review);
   } catch (error) {
     console.error("Error adding product review:", error);
@@ -124,113 +121,5 @@ export async function POST(
       { error: "Failed to add product review" },
       { status: 500 }
     );
-  }
-}
-
-// Helper function to update review summary
-async function updateReviewSummary(productId: number) {
-  try {
-    // Calculate average rating and count
-    const summary = await db
-      .selectFrom("product_reviews")
-      .select([
-        db.fn.avg("rating").as("average"),
-        db.fn.count("id").as("count")
-      ])
-      .where("product_id", "=", productId)
-      .executeTakeFirst();
-
-    if (!summary || !summary.average || !summary.count) {
-      return;
-    }
-
-    // Check if summary exists
-    const existingSummary = await db
-      .selectFrom("product_review_summary")
-      .select(["id"])
-      .where("product_id", "=", productId)
-      .executeTakeFirst();
-
-    if (existingSummary) {
-      // Update existing summary
-      await db
-        .updateTable("product_review_summary")
-        .set({
-          average: summary.average.toString(),
-          count: Number(summary.count)
-        })
-        .where("id", "=", existingSummary.id)
-        .execute();
-
-      // Update breakdown
-      await updateReviewBreakdown(existingSummary.id, productId);
-    } else {
-      // Create new summary
-      const newSummary = await db
-        .insertInto("product_review_summary")
-        .values({
-          product_id: productId,
-          average: summary.average.toString(),
-          count: Number(summary.count)
-        })
-        .returning(["id"])
-        .executeTakeFirst();
-
-      if (newSummary) {
-        await updateReviewBreakdown(newSummary.id, productId);
-      }
-    }
-  } catch (error) {
-    console.error("Error updating review summary:", error);
-  }
-}
-
-// Helper function to update review breakdown
-async function updateReviewBreakdown(summaryId: number, productId: number) {
-  try {
-    // Check if summaryId is valid
-    if (!summaryId) {
-      console.error("Invalid summary ID");
-      return;
-    }
-
-    // Get total reviews count
-    const totalCount = await db
-      .selectFrom("product_reviews")
-      .select(db.fn.count("id").as("count"))
-      .where("product_id", "=", productId)
-      .executeTakeFirstOrThrow();
-
-    // Delete existing breakdown
-    await db
-      .deleteFrom("product_review_breakdown")
-      .where("summary_id", "=", summaryId)
-      .execute();
-
-    // Calculate breakdown for each rating (1-5)
-    for (let rating = 1; rating <= 5; rating++) {
-      const ratingCount = await db
-        .selectFrom("product_reviews")
-        .select(db.fn.count("id").as("count"))
-        .where("product_id", "=", productId)
-        .where("rating", "=", rating)
-        .executeTakeFirstOrThrow();
-
-      const percentage =
-        Number(totalCount.count) > 0
-          ? (Number(ratingCount.count) / Number(totalCount.count)) * 100
-          : 0;
-
-      await db
-        .insertInto("product_review_breakdown")
-        .values({
-          summary_id: summaryId,
-          rating,
-          percentage: percentage.toString()
-        })
-        .execute();
-    }
-  } catch (error) {
-    console.error("Error updating review breakdown:", error);
   }
 }

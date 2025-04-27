@@ -36,7 +36,8 @@ export async function seed(db: Kysely<DB>) {
       price: 1299999,
       slug: "rolex-submariner",
       category: "Dive Watches",
-      image_url: "https://example.com/submariner.jpg",
+      image_url:
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
       image_alt: "Rolex Submariner",
       description: "Iconic diver's watch by Rolex.",
       // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
@@ -65,7 +66,8 @@ export async function seed(db: Kysely<DB>) {
       price: 899999,
       slug: "omega-seamaster",
       category: "Dive Watches",
-      image_url: "https://example.com/seamaster.jpg",
+      image_url:
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
       image_alt: "Omega Seamaster",
       description: "Renowned diving watch by Omega.",
       // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
@@ -159,7 +161,8 @@ export async function seed(db: Kysely<DB>) {
       excerpt: "We reviewed the best dive watches...",
       content: "Here’s our deep dive into dive watches...",
       image_alt: "Dive Watch",
-      image_url: "https://example.com/blog.jpg",
+      image_url:
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
       author_id: author.id,
       category: "Reviews",
       read_time: "5 min"
@@ -175,7 +178,8 @@ export async function seed(db: Kysely<DB>) {
       excerpt: "Affordable yet stylish timepieces.",
       content: "A roundup of the best budget watches...",
       image_alt: "Affordable Watch",
-      image_url: "https://example.com/blog2.jpg",
+      image_url:
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
       author_id: author.id,
       category: "Buying Guides",
       read_time: "4 min"

@@ -4,7 +4,56 @@ import { ArrowRight, MapPin } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-export default function AboutPage() {
+type TeamMember = {
+  name: string;
+  title: string;
+  bio: string;
+  image: string;
+};
+
+type Location = {
+  city: string;
+  address: string;
+  hours: string;
+  image: string;
+};
+
+async function getTeamMembers() {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL || ""}/api/about/team`,
+      {
+        cache: "no-store"
+      }
+    );
+    if (!res.ok) return [];
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching team members:", error);
+    return [];
+  }
+}
+
+async function getLocations() {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL || ""}/api/about/locations`,
+      {
+        cache: "no-store"
+      }
+    );
+    if (!res.ok) return [];
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching locations:", error);
+    return [];
+  }
+}
+
+export default async function AboutPage() {
+  const teamMembers = await getTeamMembers();
+  const locations = await getLocations();
+
   return (
     <div className="min-h-screen pt-24 pb-16">
       {/* Hero Section */}
@@ -39,10 +88,10 @@ export default function AboutPage() {
               The Teodinkee Journey
             </h2>
             <p className="text-lg text-gray-600">
-              Founded in 2025 by master watchmaker Ryan Teodoro, our company
+              Founded in 2010 by master watchmaker Thomas Dinkee, our company
               began with a simple mission: to create timepieces that honor
               traditional craftsmanship while embracing modern innovation. What
-              started as a small atelier in Houston has grown into a respected
+              started as a small atelier in Geneva has grown into a respected
               name in luxury horology, without ever compromising on our founding
               principles.
             </p>
@@ -155,36 +204,14 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Ryan Teodoro",
-                title: "Founder & Master Watchmaker",
-                bio: "With under 1 year of experience in haute horlogerie, Ryan founded Teodinkee to create timepieces that blend traditional craftsmanship with contemporary design.",
-                image: "professional older man with glasses in workshop",
-                imgUrl: "https://ryanteodoro.com/images/headshot.png"
-              },
-              {
-                name: "Elena Rousseau",
-                title: "Head of Design",
-                bio: "A graduate of the prestigious École d'Art et de Design in Geneva, Elena brings a unique artistic vision to Teodinkee's collections, balancing aesthetics with functionality.",
-                image: "professional woman with dark hair in design studio"
-              },
-              {
-                name: "Marcus Chen",
-                title: "Technical Director",
-                bio: "With a background in mechanical engineering and traditional watchmaking, Marcus oversees the development and production of our in-house movements.",
-                image: "asian man in professional attire examining watch"
-              }
-            ].map((member) => (
+            {teamMembers.map((member: TeamMember) => (
               <div
                 key={member.name}
                 className="bg-white p-6 rounded-lg shadow-sm"
               >
                 <div className="aspect-square relative rounded-full overflow-hidden w-32 h-32 mx-auto mb-6">
                   <Image
-                    src={`${
-                      member.imgUrl || "/abstract-geometric-shapes.png"
-                    }?height=128&width=128&query=${member.image}`}
+                    src={`/abstract-geometric-shapes.png?height=128&width=128&query=${member.image}`}
                     alt={member.name}
                     fill
                     className="object-cover"
@@ -213,26 +240,7 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                city: "Geneva",
-                address: "14 Rue du Rhône\nGeneva, Switzerland",
-                hours: "Monday - Saturday: 10am - 7pm\nSunday: Closed",
-                image: "luxury watch boutique in geneva"
-              },
-              {
-                city: "New York",
-                address: "121 Spring Street\nNew York, NY 10012",
-                hours: "Monday - Saturday: 11am - 8pm\nSunday: 12pm - 6pm",
-                image: "luxury watch boutique in new york"
-              },
-              {
-                city: "Tokyo",
-                address: "5-2-1 Ginza\nChuo City, Tokyo 104-0061",
-                hours: "Monday - Sunday: 10am - 7pm",
-                image: "luxury watch boutique in tokyo"
-              }
-            ].map((location) => (
+            {locations.map((location: Location) => (
               <div
                 key={location.city}
                 className="border rounded-lg overflow-hidden group"

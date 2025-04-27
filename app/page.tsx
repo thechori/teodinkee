@@ -5,7 +5,6 @@ import { ArrowRight, Clock, Package, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FeaturedProducts from "@/components/product/featured-products";
 import NewsletterSignup from "@/components/newsletter-signup";
-import { collections } from "@/data/collections";
 
 export default function HomePage() {
   return (
@@ -42,7 +41,7 @@ export default function HomePage() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="bg-black/50 border-white text-white hover:bg-white/10 hover:text-white"
+                className="border-white text-white hover:bg-white/10"
               >
                 <Link href="/about">Our Story</Link>
               </Button>
@@ -58,7 +57,23 @@ export default function HomePage() {
             Explore Our Collections
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {collections.map((category) => (
+            {[
+              {
+                name: "Luxury",
+                image: "luxury watch with gold details",
+                description: "Timeless elegance for the discerning collector"
+              },
+              {
+                name: "Sport",
+                image: "sporty chronograph watch",
+                description: "Precision engineering for the active lifestyle"
+              },
+              {
+                name: "Classic",
+                image: "classic minimalist watch",
+                description: "Understated sophistication for everyday wear"
+              }
+            ].map((category) => (
               <Link
                 href={`/products?category=${category.name.toLowerCase()}`}
                 key={category.name}
@@ -66,7 +81,7 @@ export default function HomePage() {
               >
                 <div className="aspect-[4/5] relative">
                   <Image
-                    src={`${category.imgUrl}?height=600&width=480`}
+                    src={`/abstract-geometric-shapes.png?height=600&width=480&query=${category.image}`}
                     alt={category.name}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"

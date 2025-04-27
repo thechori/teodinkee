@@ -47,8 +47,14 @@ export async function GET(request: Request) {
 
     const totalCount = await countQuery.executeTakeFirstOrThrow();
 
+    // Format prices from cents to dollars for display
+    const formattedProducts = products.map((product) => ({
+      ...product,
+      price: product.price / 100 // Convert cents to dollars
+    }));
+
     return NextResponse.json({
-      products,
+      products: formattedProducts,
       pagination: {
         total: Number(totalCount.count),
         page,

@@ -25,60 +25,31 @@ import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 
-// Mock order data
-const orders = [
-  {
-    id: "ORD-7291",
-    date: "June 12, 2023",
-    status: "Delivered",
-    total: "$4,850.00",
-    items: [
-      {
-        name: "Chronograph Master",
-        image: "luxury chronograph watch with blue dial",
-        price: "$4,850.00"
-      }
-    ]
-  },
-  {
-    id: "ORD-6184",
-    date: "April 23, 2023",
-    status: "Delivered",
-    total: "$3,200.00",
-    items: [
-      {
-        name: "Diver Professional",
-        image: "professional diving watch with black bezel",
-        price: "$3,200.00"
-      }
-    ]
-  }
-];
+type OrderItem = {
+  id: number;
+  name: string;
+  image_url: string;
+  slug: string;
+  quantity: number;
+  price_at_purchase_in_cents: number;
+};
 
-// Mock wishlist data
-const wishlist = [
-  {
-    id: 1,
-    name: "Grand Tourbillon",
-    price: "$12,500.00",
-    image: "luxury tourbillon watch with skeleton dial",
-    slug: "grand-tourbillon"
-  },
-  {
-    id: 2,
-    name: "Vintage Elegance",
-    price: "$3,800.00",
-    image: "vintage style watch with cream dial",
-    slug: "vintage-elegance"
-  },
-  {
-    id: 3,
-    name: "Skeleton Artisan",
-    price: "$7,500.00",
-    image: "skeleton dial watch showing movement",
-    slug: "skeleton-artisan"
-  }
-];
+type Order = {
+  id: number;
+  created_at: string;
+  status: string;
+  total_price_in_cents: number;
+  tracking_number: string | null;
+  items: OrderItem[];
+};
+
+type WishlistItem = {
+  id: number;
+  name: string;
+  price: number;
+  image_url: string;
+  slug: string;
+};
 
 export default function AccountPage() {
   const { data: session, status } = useSession();
@@ -98,6 +69,10 @@ export default function AccountPage() {
     zipCode: "",
     country: ""
   });
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(false);
+  const [isLoadingWishlist, setIsLoadingWishlist] = useState(false);
 
   useEffect(() => {
     if (
@@ -126,6 +101,76 @@ export default function AccountPage() {
     }
   }, [session, status, router]);
 
+  // Fetch orders when on orders tab
+  useEffect(() => {
+    if (status === "authenticated" && activeTab === "orders") {
+      fetchOrders();
+    }
+  }, [status, activeTab]);
+
+  // Fetch wishlist when on wishlist tab
+  useEffect(() => {
+    if (status === "authenticated" && activeTab === "wishlist") {
+      fetchWishlist();
+    }
+  }, [status, activeTab]);
+
+  const fetchOrders = async () => {
+    setIsLoadingOrders(true);
+    try {
+      const response = await fetch("/api/account/orders");
+      if (!response.ok) throw new Error("Failed to fetch orders");
+      const data = await response.json();
+      setOrders(data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      toast.error("Failed to load orders");
+    } finally {
+      setIsLoadingOrders(false);
+    }
+  };
+
+  const fetchWishlist = async () => {
+    setIsLoadingWishlist(true);
+    try {
+      // For now, we'll use mock data since we haven't implemented the wishlist API yet
+      // In a real app, you would fetch from an API endpoint
+      setTimeout(() => {
+        setWishlist([
+          {
+            id: 1,
+            name: "Grand Tourbillon",
+            price: 12500,
+            image_url:
+              "/abstract-geometric-shapes.png?height=300&width=300&query=luxury tourbillon watch with skeleton dial",
+            slug: "grand-tourbillon"
+          },
+          {
+            id: 2,
+            name: "Vintage Elegance",
+            price: 3800,
+            image_url:
+              "/abstract-geometric-shapes.png?height=300&width=300&query=vintage style watch with cream dial",
+            slug: "vintage-elegance"
+          },
+          {
+            id: 3,
+            name: "Skeleton Artisan",
+            price: 7500,
+            image_url:
+              "/abstract-geometric-shapes.png?height=300&width=300&query=skeleton dial watch showing movement",
+            slug: "skeleton-artisan"
+          }
+        ]);
+        setIsLoadingWishlist(false);
+      }, 500);
+    } catch (error) {
+      console.error("Error fetching wishlist:", error);
+      toast.error("Failed to load wishlist");
+      setIsLoadingWishlist(false);
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -139,6 +184,7 @@ export default function AccountPage() {
   };
 
   const handleRemoveWishlistItem = (id: number) => {
+    setWishlist(wishlist.filter((item) => item.id !== id));
     toast("Item removed", {
       description: "The item has been removed from your wishlist."
     });
@@ -281,7 +327,12 @@ export default function AccountPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {orders.length > 0 ? (
+                    {isLoadingOrders ? (
+                      <div className="text-center py-12">
+                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900 mx-auto mb-4"></div>
+                        <p className="text-gray-600">Loading your orders...</p>
+                      </div>
+                    ) : orders.length > 0 ? (
                       <div className="space-y-6">
                         {orders.map((order) => (
                           <div
@@ -292,11 +343,11 @@ export default function AccountPage() {
                               <div>
                                 <div className="flex items-center gap-2">
                                   <span className="font-medium">
-                                    Order {order.id}
+                                    Order #{order.id}
                                   </span>
                                   <span
                                     className={`px-2 py-1 text-xs rounded-full ${
-                                      order.status === "Delivered"
+                                      order.status === "DELIVERED"
                                         ? "bg-green-100 text-green-800"
                                         : "bg-blue-100 text-blue-800"
                                     }`}
@@ -305,7 +356,10 @@ export default function AccountPage() {
                                   </span>
                                 </div>
                                 <p className="text-sm text-gray-500">
-                                  Placed on {order.date}
+                                  Placed on{" "}
+                                  {new Date(
+                                    order.created_at
+                                  ).toLocaleDateString()}
                                 </p>
                               </div>
                               <div className="flex gap-2">
@@ -325,7 +379,7 @@ export default function AccountPage() {
                                 >
                                   <div className="h-16 w-16 rounded-md overflow-hidden relative flex-shrink-0">
                                     <Image
-                                      src={`/abstract-geometric-shapes.png?height=64&width=64&query=${item.image}`}
+                                      src={item.image_url || "/placeholder.svg"}
                                       alt={item.name}
                                       fill
                                       className="object-cover"
@@ -334,7 +388,10 @@ export default function AccountPage() {
                                   <div className="flex-1">
                                     <h4 className="font-medium">{item.name}</h4>
                                     <p className="text-sm text-gray-500">
-                                      {item.price}
+                                      $
+                                      {(
+                                        item.price_at_purchase_in_cents / 100
+                                      ).toFixed(2)}
                                     </p>
                                   </div>
                                   <Button variant="outline" size="sm">
@@ -373,7 +430,14 @@ export default function AccountPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {wishlist.length > 0 ? (
+                    {isLoadingWishlist ? (
+                      <div className="text-center py-12">
+                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900 mx-auto mb-4"></div>
+                        <p className="text-gray-600">
+                          Loading your wishlist...
+                        </p>
+                      </div>
+                    ) : wishlist.length > 0 ? (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {wishlist.map((item) => (
                           <div
@@ -382,7 +446,7 @@ export default function AccountPage() {
                           >
                             <div className="aspect-square relative">
                               <Image
-                                src={`/abstract-geometric-shapes.png?height=300&width=300&query=${item.image}`}
+                                src={item.image_url || "/placeholder.svg"}
                                 alt={item.name}
                                 fill
                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -407,7 +471,9 @@ export default function AccountPage() {
                                   {item.name}
                                 </h3>
                               </Link>
-                              <p className="text-gray-500 mb-3">{item.price}</p>
+                              <p className="text-gray-500 mb-3">
+                                ${item.price.toLocaleString()}
+                              </p>
                               <Button className="w-full">Add to Cart</Button>
                             </div>
                           </div>

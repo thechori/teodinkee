@@ -1,16 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Heart, ShoppingCart } from "lucide-react";
-import { toast } from "sonner";
-//
+
 import { Button } from "@/components/ui/button";
-import { products } from "@/data/products";
+import { toast } from "sonner";
+
+type Product = {
+  id: number;
+  name: string;
+  brand: string;
+  price: number;
+  image_url: string;
+  image_alt: string | null;
+  slug: string;
+};
 
 export default function FeaturedProducts() {
+  const [products, setProducts] = useState<Product[]>([]);
   const [wishlist, setWishlist] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load products
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const response = await fetch("/api/products?featured=true&limit=4");
+        if (!response.ok) throw new Error("Failed to fetch products");
+        const data = await response.json();
+        setProducts(data.products);
+      } catch (error) {
+        console.error("Error loading featured products:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
 
   const toggleWishlist = (id: number) => {
     if (wishlist.includes(id)) {
@@ -23,63 +52,76 @@ export default function FeaturedProducts() {
   };
 
   const addToCart = (name: string) => {
-    toast("Added to cart", {
+    toast.success("Added to cart", {
       description: `${name} has been added to your cart.`
     });
   };
 
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-      {products
-        .filter((_, index) => index < 4)
-        .map((product) => (
-          <div key={product.id} className="group relative">
-            <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-4">
-              <Link href={`/products/${product.slug}`}>
-                <Image
-                  src={`${product.imgUrl}?height=600&width=600`}
-                  alt={product.name}
-                  width={600}
-                  height={600}
-                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                />
-              </Link>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm hover:bg-white rounded-full"
-                onClick={() => toggleWishlist(product.id)}
-              >
-                <Heart
-                  className={`h-5 w-5 ${
-                    wishlist.includes(product.id)
-                      ? "fill-red-500 text-red-500"
-                      : "text-gray-600"
-                  }`}
-                />
-                <span className="sr-only">Add to wishlist</span>
-              </Button>
-            </div>
-            <div>
-              <Link href={`/products/${product.slug}`} className="block">
-                <h3 className="text-lg font-medium">{product.name}</h3>
-                <p className="text-sm text-gray-500 mb-2">{product.brand}</p>
-              </Link>
-              <div className="flex justify-between items-center">
-                <p className="font-medium">${product.price.toLocaleString()}</p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full"
-                  onClick={() => addToCart(product.name)}
-                >
-                  <ShoppingCart className="h-4 w-4 mr-2" />
-                  Add
-                </Button>
-              </div>
-            </div>
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="animate-pulse">
+            <div className="aspect-square rounded-lg bg-gray-200 mb-4"></div>
+            <div className="h-5 bg-gray-200 rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+            <div className="h-6 bg-gray-200 rounded w-1/4"></div>
           </div>
         ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {products.map((product) => (
+        <div key={product.id} className="group relative">
+          <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-4">
+            <Link href={`/products/${product.slug}`}>
+              <Image
+                src={product.image_url || "/placeholder.svg"}
+                alt={product.image_alt || product.name}
+                width={600}
+                height={600}
+                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+              />
+            </Link>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm hover:bg-white rounded-full"
+              onClick={() => toggleWishlist(product.id)}
+            >
+              <Heart
+                className={`h-5 w-5 ${
+                  wishlist.includes(product.id)
+                    ? "fill-red-500 text-red-500"
+                    : "text-gray-600"
+                }`}
+              />
+              <span className="sr-only">Add to wishlist</span>
+            </Button>
+          </div>
+          <div>
+            <Link href={`/products/${product.slug}`} className="block">
+              <h3 className="text-lg font-medium">{product.name}</h3>
+              <p className="text-sm text-gray-500 mb-2">{product.brand}</p>
+            </Link>
+            <div className="flex justify-between items-center">
+              <p className="font-medium">${product.price.toLocaleString()}</p>
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-full"
+                onClick={() => addToCart(product.name)}
+              >
+                <ShoppingCart className="h-4 w-4 mr-2" />
+                Add
+              </Button>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
