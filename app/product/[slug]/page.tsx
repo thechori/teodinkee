@@ -162,7 +162,7 @@ export default async function ProductDetailPage({
             <div className="sticky top-24">
               <Tabs defaultValue="image-0" className="w-full">
                 <div className="aspect-square mb-4 rounded-lg overflow-hidden bg-gray-100">
-                  {productImages.map((image, index) => (
+                  {productImages.map((image: any, index: number) => (
                     <TabsContent
                       key={`image-${index}`}
                       value={`image-${index}`}
@@ -179,7 +179,7 @@ export default async function ProductDetailPage({
                   ))}
                 </div>
                 <TabsList className="grid grid-cols-4 gap-2 h-auto bg-transparent">
-                  {productImages.map((image, index) => (
+                  {productImages.map((image: any, index: number) => (
                     <TabsTrigger
                       key={`thumb-${index}`}
                       value={`image-${index}`}
@@ -232,7 +232,7 @@ export default async function ProductDetailPage({
             <div className="mb-8">
               <h3 className="font-medium mb-3">Key Features</h3>
               <ul className="space-y-2">
-                {features.map((feature, index) => (
+                {features.map((feature: any, index: number) => (
                   <li key={index} className="flex items-start">
                     <Check className="h-5 w-5 text-green-500 mr-2 flex-shrink-0" />
                     <span>{feature}</span>
@@ -306,10 +306,10 @@ export default async function ProductDetailPage({
         <Separator className="my-16" />
 
         {/* Reviews Section */}
-        <ProductReviews
+        {/* <ProductReviews
           productId={product.id}
           reviewSummary={product.reviews}
-        />
+        /> */}
 
         <Separator className="my-16" />
 

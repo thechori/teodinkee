@@ -166,6 +166,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("published_at", sql`timestamp with time zone`, (col) =>
       col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
+    .addColumn("featured", "boolean", (col) => col.defaultTo(false))
     .execute();
 
   // Create related_blog_posts junction table

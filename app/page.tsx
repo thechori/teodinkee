@@ -5,6 +5,7 @@ import { ArrowRight, Clock, Package, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FeaturedProducts from "@/components/product/featured-products";
 import NewsletterSignup from "@/components/newsletter-signup";
+import LatestBlogPosts from "@/components/blog-posts/latest-blog-posts";
 
 export default function HomePage() {
   return (
@@ -177,57 +178,7 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "The Art of Mechanical Movements",
-                excerpt:
-                  "Exploring the intricate craftsmanship behind today's finest mechanical watch movements.",
-                image: "close up of watch movement gears",
-                date: "May 15, 2023",
-                slug: "art-of-mechanical-movements"
-              },
-              {
-                title: "Investing in Luxury Watches",
-                excerpt:
-                  "How certain timepieces have become more than accessories, but valuable investment assets.",
-                image: "luxury watches displayed in collection case",
-                date: "April 28, 2023",
-                slug: "investing-in-luxury-watches"
-              },
-              {
-                title: "The Rise of Independent Watchmakers",
-                excerpt:
-                  "Discover the small ateliers creating some of the most innovative designs in horology.",
-                image: "watchmaker working at desk with tools",
-                date: "April 10, 2023",
-                slug: "rise-of-independent-watchmakers"
-              }
-            ].map((post) => (
-              <Link
-                href={`/blog/${post.slug}`}
-                key={post.slug}
-                className="group overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-              >
-                <div className="aspect-[16/9] relative">
-                  <Image
-                    src={`/abstract-geometric-shapes.png?height=400&width=600&query=${post.image}`}
-                    alt={post.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-6 bg-white">
-                  <p className="text-sm text-gray-500 mb-2">{post.date}</p>
-                  <h3 className="text-xl font-medium mb-2 group-hover:text-gray-700">
-                    {post.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4">{post.excerpt}</p>
-                  <span className="text-sm font-medium flex items-center">
-                    Read More <ArrowRight className="ml-2 h-4 w-4" />
-                  </span>
-                </div>
-              </Link>
-            ))}
+            <LatestBlogPosts />
           </div>
         </div>
       </section>
