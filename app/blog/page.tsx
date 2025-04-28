@@ -126,8 +126,8 @@ export default function BlogPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
               <div className="aspect-[16/9] relative rounded-lg overflow-hidden">
                 <Image
-                  src={`/abstract-geometric-shapes.png?height=600&width=900&query=${featuredPost.img_url}`}
-                  alt={featuredPost.img_alt || "cool watch photo"}
+                  src={`${featuredPost.img_url}?height=600&width=900`}
+                  alt={featuredPost.img_alt || featuredPost.title}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -180,8 +180,8 @@ export default function BlogPage() {
               <Link href={`/blog/${post.slug}`}>
                 <div className="aspect-[16/9] relative">
                   <Image
-                    src={`/abstract-geometric-shapes.png?height=400&width=600&query=${post.img_url}`}
-                    alt={post.img_alt || "image of watch"}
+                    src={`${featuredPost.img_url}?height=600&width=900`}
+                    alt={featuredPost.img_alt || featuredPost.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
