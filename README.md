@@ -20,4 +20,4 @@ This application is deployed via Vercel and uses Git branches to manage the CI/C
 
 ## Notes
 
-?
+Had to add `"prebuild": "pnpm run types:generate"` to ensure that types were being generated within Vercel before the build to ensure the types were good - not a problem when types are in git version control, but this is a huge problem when the types are being included via the `kysely-codegen` package (the default approach)

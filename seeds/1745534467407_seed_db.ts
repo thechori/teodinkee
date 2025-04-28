@@ -33,7 +33,7 @@ export async function seed(db: Kysely<DB>) {
     .values({
       name: "Submariner",
       brand: "Rolex",
-      price: 1299999,
+      price: 1299900,
       slug: "rolex-submariner",
       category: "Dive Watches",
       img_url:
@@ -63,7 +63,7 @@ export async function seed(db: Kysely<DB>) {
     .values({
       name: "Seamaster",
       brand: "Omega",
-      price: 5750000,
+      price: 575000,
       slug: "omega-seamaster",
       category: "Dive Watches",
       img_url:

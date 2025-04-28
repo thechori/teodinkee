@@ -292,7 +292,7 @@ export default async function ProductsPage() {
                       {product.brand}
                     </p>
                     <p className="font-medium">
-                      ${product.price.toLocaleString()}
+                      ${(product.price / 100).toLocaleString()}
                     </p>
                   </div>
                 </Link>
