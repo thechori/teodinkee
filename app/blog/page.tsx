@@ -49,6 +49,7 @@ export default function BlogPage() {
         const response = await fetch("/api/blog");
         if (!response.ok) throw new Error("Failed to fetch blogPosts");
         const data = await response.json();
+        console.log("data", data);
         setBlogPosts(data);
       } catch (error) {
         console.error("Error loading featured blogPosts:", error);
@@ -60,11 +61,10 @@ export default function BlogPage() {
     loadBlogPosts();
   }, []);
 
-  if (!blogPosts || blogPosts.length === 0) return notFound;
+  if (isLoading) return <div>Loading...</div>;
+  if (!blogPosts || blogPosts.length === 0) return notFound();
 
   const featuredPost = blogPosts[0];
-
-  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -180,8 +180,8 @@ export default function BlogPage() {
               <Link href={`/blog/${post.slug}`}>
                 <div className="aspect-[16/9] relative">
                   <Image
-                    src={`${featuredPost.img_url}?height=600&width=900`}
-                    alt={featuredPost.img_alt || featuredPost.title}
+                    src={`${post.img_url}?height=600&width=900`}
+                    alt={post.img_alt || post.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
