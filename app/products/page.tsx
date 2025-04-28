@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Filter } from "lucide-react";
-
+import { notFound } from "next/navigation";
+//
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -20,9 +21,30 @@ import {
 } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-import { products } from "@/data/products";
+import { db } from "@/lib/db";
 
-export default function ProductsPage() {
+async function getProducts() {
+  try {
+    const products = await db.selectFrom("products").selectAll().execute();
+
+    if (!products) {
+      return null;
+    }
+
+    return products;
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    return null;
+  }
+}
+
+export default async function ProductsPage() {
+  const products = await getProducts();
+
+  if (!products) {
+    notFound();
+  }
+
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

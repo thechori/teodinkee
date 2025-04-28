@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/lib/db";
-import ProductReviews from "@/components/product/product-reviews";
+// import ProductReviews from "@/components/product/product-reviews";
 import RelatedProducts from "@/components/product/related-products";
 
 async function getProduct(slug: string) {
@@ -132,7 +132,8 @@ export default async function ProductDetailPage({
 }: {
   params: { slug: string };
 }) {
-  const product = await getProduct(params.slug);
+  const { slug } = await params;
+  const product = await getProduct(slug);
 
   if (!product) {
     notFound();
@@ -169,7 +170,7 @@ export default async function ProductDetailPage({
                       className="m-0"
                     >
                       <Image
-                        src={image || "/placeholder.svg"}
+                        src={image || "/images/placeholders/product.png"}
                         alt={`${product.name} - View ${index + 1}`}
                         width={800}
                         height={800}
@@ -314,7 +315,7 @@ export default async function ProductDetailPage({
         <Separator className="my-16" />
 
         {/* Related Products */}
-        <RelatedProducts productId={product.id} />
+        {/* <RelatedProducts productId={product.id} /> */}
       </div>
     </div>
   );

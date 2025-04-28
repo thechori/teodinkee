@@ -37,12 +37,12 @@ export async function seed(db: Kysely<DB>) {
       slug: "rolex-submariner",
       category: "Dive Watches",
       img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/diver-rolex-submariner-1G7eTveeomCLnlFqjx9BzCCbKVxgj0.webp",
       img_alt: "Rolex Submariner",
       description: "Iconic diver's watch by Rolex.",
       // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
       features: sql`ARRAY['Water Resistant', 'Ceramic Bezel']`,
-      images: sql`ARRAY['https://example.com/submariner1.jpg', 'https://example.com/submariner2.jpg']`,
+      images: sql`ARRAY['https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/diver-rolex-submariner-1G7eTveeomCLnlFqjx9BzCCbKVxgj0.webp', 'https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/diver-rolex-submariner-2-M2pg1vCuRiSpxUuxZUkkdhCKS8IpHZ.png']`,
       case_diameter: "40mm",
       case_thickness: "12.5mm",
       case_material: "Stainless Steel",
@@ -67,12 +67,12 @@ export async function seed(db: Kysely<DB>) {
       slug: "omega-seamaster",
       category: "Dive Watches",
       img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/aqua-explorer-omega-seamaster-aqua-terra-GXdlQ3IjUHMMUUKzAERhwaFvpk0ZAj.jpg",
       img_alt: "Omega Seamaster",
       description: "Renowned diving watch by Omega.",
       // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
       features: sql`ARRAY['Wave Dial', 'Helium Escape Valve']`,
-      images: sql`ARRAY['https://example.com/seamaster1.jpg', 'https://example.com/seamaster2.jpg']`,
+      images: sql`ARRAY['https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/aqua-explorer-omega-seamaster-aqua-terra-GXdlQ3IjUHMMUUKzAERhwaFvpk0ZAj.jpg', 'https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/aqua-explorer-omega-seamaster-aqua-terra-2-rv0ROd8wCzjNvpdYLUvmXBfzvMQngT.png']`,
       case_diameter: "42mm",
       case_thickness: "13.5mm",
       case_material: "Stainless Steel",
@@ -84,6 +84,36 @@ export async function seed(db: Kysely<DB>) {
       bracelet_or_strap: "Stainless Bracelet",
       clasp: "Foldover",
       functions: "Date, Rotating Bezel"
+    })
+    .returningAll()
+    .execute();
+
+  const [thirdProduct] = await db
+    .insertInto("products")
+    .values({
+      name: "Carrera",
+      brand: "Tag Heuer",
+      price: 399999,
+      slug: "tag-heuer-carrera",
+      category: "Chronograph Watches",
+      img_url:
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
+      img_alt: "Tag Heuer Carrera",
+      description: "Renowned racing watch by Tag Heuer.",
+      // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
+      features: sql`ARRAY['Chronograph', 'Helium Escape Valve']`,
+      images: sql`ARRAY['https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif', 'https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-2-jpkgtmjSiMPHPPNr6ApK2GSRAFlTLI.png']`,
+      case_diameter: "42mm",
+      case_thickness: "13.5mm",
+      case_material: "Stainless Steel",
+      dial_color: "Black",
+      crystal: "Sapphire",
+      movement: "Automatic",
+      power_reserve: "35 hours",
+      water_resistance: "100m",
+      bracelet_or_strap: "Stainless Bracelet",
+      clasp: "Foldover",
+      functions: "Date, Chronograph"
     })
     .returningAll()
     .execute();
