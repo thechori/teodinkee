@@ -22,7 +22,6 @@ import { usePathname } from "next/navigation";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Products", href: "/products" },
-  { name: "Collections", href: "/collections" },
   { name: "Blog", href: "/blog" },
   { name: "About", href: "/about" }
 ];
