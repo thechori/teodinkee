@@ -177,7 +177,7 @@ export default function HomePage() {
               View All Articles <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
             <LatestBlogPosts />
           </div>
         </div>

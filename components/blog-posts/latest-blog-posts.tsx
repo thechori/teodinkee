@@ -30,7 +30,7 @@ const LatestBlogPosts = () => {
   }, []);
 
   return (
-    <div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
       {isLoading ? (
         <div>loading...</div>
       ) : (
