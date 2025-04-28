@@ -16,10 +16,10 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { analytics, segmentEvents } from "@/lib/analytics";
 import { useEffect, useState } from "react";
-import { Products } from "kysely-codegen";
+// import { Products } from "kysely-codegen";
 
 export default function ProductDetailPage() {
-  const [product, setProduct] = useState<Products | null>(null);
+  const [product, setProduct] = useState<any>(null); // special type formed by the api/products/slug endpoint
   const [loading, setLoading] = useState(true);
 
   const { slug } = useParams();
@@ -39,7 +39,6 @@ export default function ProductDetailPage() {
 
     fetchProduct();
   }, []);
-  // const product = await getProduct(slug);
 
   if (loading) return <div>Loading...</div>;
   if (!product) {
@@ -200,7 +199,7 @@ export default function ProductDetailPage() {
                                 .replace(/_/g, " ")
                                 .replace(/\b\w/g, (l) => l.toUpperCase())}
                             </p>
-                            <p className="font-medium">{value}</p>
+                            <p className="font-medium">{value as string}</p>
                           </div>
                         ))}
                   </div>
