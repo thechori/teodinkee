@@ -41,7 +41,7 @@ const LatestBlogPosts = () => {
           >
             <div className="aspect-[16/9] relative">
               <Image
-                src={`/abstract-geometric-shapes.png?height=400&width=600&query=${post.img_url}`}
+                src={`${post.img_url}?height=400&width=600`}
                 alt={post.title}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-105"

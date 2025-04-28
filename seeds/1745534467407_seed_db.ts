@@ -63,7 +63,7 @@ export async function seed(db: Kysely<DB>) {
     .values({
       name: "Seamaster",
       brand: "Omega",
-      price: 899999,
+      price: 5750000,
       slug: "omega-seamaster",
       category: "Dive Watches",
       img_url:
@@ -93,7 +93,7 @@ export async function seed(db: Kysely<DB>) {
     .values({
       name: "Carrera",
       brand: "Tag Heuer",
-      price: 399999,
+      price: 660000,
       slug: "tag-heuer-carrera",
       category: "Chronograph Watches",
       img_url:
@@ -114,6 +114,36 @@ export async function seed(db: Kysely<DB>) {
       bracelet_or_strap: "Stainless Bracelet",
       clasp: "Foldover",
       functions: "Date, Chronograph"
+    })
+    .returningAll()
+    .execute();
+
+  const [fourthProduct] = await db
+    .insertInto("products")
+    .values({
+      name: "Big Pilot",
+      brand: "IWC",
+      price: 1250000,
+      slug: "iwc-big-pilot",
+      category: "Pilot Watches",
+      img_url:
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/pilot-chronometer-iwc-big-pilot-Trh3XiQTw0oFbH7wkQTeJ6CJ5j7vP5.avif",
+      img_alt: "IWC Big Pilot",
+      description: "Preferred watch by pilots in the Air Force.",
+      // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
+      features: sql`ARRAY['Utility', 'Helium Escape Valve']`,
+      images: sql`ARRAY['https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/pilot-chronometer-iwc-big-pilot-Trh3XiQTw0oFbH7wkQTeJ6CJ5j7vP5.avif', 'https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/pilot-chronometer-iwc-big-pilot-2-ZxrbdO6Lg2zTA7hOEURnc3K35Bpk87.jpg']`,
+      case_diameter: "48mm",
+      case_thickness: "13.5mm",
+      case_material: "Stainless Steel",
+      dial_color: "Black",
+      crystal: "Sapphire",
+      movement: "Automatic",
+      power_reserve: "35 hours",
+      water_resistance: "100m",
+      bracelet_or_strap: "Leather Strap",
+      clasp: "Foldover",
+      functions: "Visibility, Utility"
     })
     .returningAll()
     .execute();
@@ -217,7 +247,7 @@ export async function seed(db: Kysely<DB>) {
       content: "Here’s our deep dive into dive watches...",
       img_alt: "Dive Watch",
       img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-top-dive-watches-ieot2aYD39yUsQLxAfCSBIxFlwvykJ.avif",
       author_id: author.id,
       category: "Reviews",
       read_time: "5 min"
@@ -234,10 +264,27 @@ export async function seed(db: Kysely<DB>) {
       content: "A roundup of the best budget watches...",
       img_alt: "Affordable Watch",
       img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-watches-under-1000-RNkFrWsOS3vJxVk4vOy8sso1yGjkYE.webp",
       author_id: author.id,
       category: "Buying Guides",
       read_time: "4 min"
+    })
+    .returningAll()
+    .execute();
+
+  const [thirdBlogPost] = await db
+    .insertInto("blog_posts")
+    .values({
+      title: "Why John Mayer Loves Watches",
+      slug: "why-john-mayer-loves-watches",
+      excerpt: "John Mayer makes great music. He also loves watches..",
+      content: "Your timeeeepiece is a wonderlandddd...",
+      img_alt: "John Mayer and Watch",
+      img_url:
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-john-mayer-watches-ABqZgoMSCc7m39ol4dRCGzD7B2rzXT.webp",
+      author_id: author.id,
+      category: "Fun Piece",
+      read_time: "2 min"
     })
     .returningAll()
     .execute();
