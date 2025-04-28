@@ -296,7 +296,7 @@ export async function seed(db: Kysely<DB>) {
         content: "A roundup of the best budget watches...",
         img_alt: "Affordable Watch",
         img_url:
-          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-watches-under-1000-RNkFrWsOS3vJxVk4vOy8sso1yGjkYE.webp",
+          "https://magazine.chrono24.com/cdn-cgi/image/f=auto,metadata=none,fit=cover,q=65,w=1190,h=595,dpr=2.0/2014/09/Top10-Best-Watches-under-1000-2-1.jpg",
         author_id: author.id,
         category: productCategory.BUDGET,
         read_time: "4 min"
@@ -310,7 +310,7 @@ export async function seed(db: Kysely<DB>) {
           "In this article, we take a deep dive into the revival of mechanical watchmaking, its cultural impact, and the enthusiasts fueling its growth.",
         img_alt: "watchmaker working on mechanical watch movement with loupe",
         img_url:
-          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+          "https://timeandtidewatches.com/wp-content/uploads/2024/09/Ring-watches-history-feature-copy.jpg",
         author_id: author.id,
         category: productCategory.CLASSIC,
         read_time: "8 min read",
@@ -325,7 +325,7 @@ export async function seed(db: Kysely<DB>) {
           "A closer look at the engineering brilliance and artisanal craftsmanship behind mechanical watch movements.",
         img_alt: "close up of watch movement gears",
         img_url:
-          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+          "https://timeandtidewatches.com/wp-content/uploads/2024/06/best-mechanical-watches-under-1000-feature.webp",
         author_id: author.id,
         category: productCategory.CLASSIC,
         read_time: "6 min read",
@@ -340,7 +340,7 @@ export async function seed(db: Kysely<DB>) {
           "Luxury watches are increasingly viewed as investment vehicles. Here’s what collectors and investors should know.",
         img_alt: "luxury watches displayed in collection case",
         img_url:
-          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL4EKqxNW60Yvvj_m1_59m-Mww-RIjYWViGg&s",
         author_id: author.id,
         category: productCategory.LUXURY,
         read_time: "5 min read",
@@ -354,8 +354,7 @@ export async function seed(db: Kysely<DB>) {
         content:
           "Independent watchmakers are making waves with unique designs and boundary-pushing innovations.",
         img_alt: "watchmaker working at desk with tools",
-        img_url:
-          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+        img_url: "https://i.ytimg.com/vi/ZX4bayWIs84/maxresdefault.jpg",
         author_id: author.id,
         category: productCategory.BUDGET,
         read_time: "7 min read",
@@ -370,7 +369,7 @@ export async function seed(db: Kysely<DB>) {
           "Let’s demystify watch complications and explore why they matter to collectors and horology lovers.",
         img_alt: "complicated watch movement showing multiple complications",
         img_url:
-          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+          "https://timeandtidewatches.com/wp-content/uploads/2023/11/Paul-Gerber-Franck-Muller-Superbia-Humanitatis.jpg.webp",
         author_id: author.id,
         category: productCategory.LUXURY,
         read_time: "9 min read",
@@ -385,7 +384,7 @@ export async function seed(db: Kysely<DB>) {
           "Dive into the history of dive watches, their military origins, and their transformation into fashion icons.",
         img_alt: "vintage and modern dive watches side by side",
         img_url:
-          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+          "https://hodinkee.imgix.net/uploads/images/85867caf-a6ca-45ec-8abc-eae50c39cfd0/WODHEROFINAL4.jpg?ixlib=rails-1.1.0&fm=jpg&q=55&auto=format&usm=12",
         author_id: author.id,
         category: productCategory.DIVER,
         read_time: "6 min read",
@@ -399,7 +398,7 @@ export async function seed(db: Kysely<DB>) {
           "Watches require care and attention. Here's a guide to keeping yours ticking perfectly.",
         img_alt: "watch being serviced by watchmaker",
         img_url:
-          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+          "https://hodinkee.imgix.net/uploads/images/a8776a6a-cb75-4216-be70-3eda750cd686/Pilotswatch-hero.jpg?ixlib=rails-1.1.0&fm=jpg&q=55&auto=format&usm=12",
         author_id: author.id,
         category: productCategory.PILOT,
         read_time: "4 min read",
