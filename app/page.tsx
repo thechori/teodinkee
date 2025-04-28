@@ -18,7 +18,7 @@ export default function HomePage() {
             src="/elegant-timepiece.png"
             alt="Luxury watch showcase"
             fill
-            className="object-cover brightness-75"
+            className="object-cover brightness-40"
             priority
           />
         </div>

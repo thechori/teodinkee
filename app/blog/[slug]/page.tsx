@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { notFound } from "next/navigation";
 import { BlogPosts } from "kysely-codegen";
+import { analytics, segmentEvents } from "@/lib/analytics";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -31,9 +32,10 @@ export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
 
   const post = await getPostBySlug(slug);
-  console.log("post", post);
 
   if (!post) return notFound();
+
+  analytics.track(segmentEvents.ARTICLE_VIEWED, post);
 
   return (
     <div className="min-h-screen pt-24 pb-16">

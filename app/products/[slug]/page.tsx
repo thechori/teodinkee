@@ -1,7 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Check, Heart, ShoppingCart, Star } from "lucide-react";
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,133 +14,42 @@ import {
   AccordionTrigger
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
-import { db } from "@/lib/db";
+import { analytics, segmentEvents } from "@/lib/analytics";
+import { useEffect, useState } from "react";
+import { Products } from "kysely-codegen";
 
-async function getProduct(slug: string) {
-  try {
-    // Get the product with all its details (now in a single table)
-    const product = await db
-      .selectFrom("products")
-      .select([
-        "id",
-        "name",
-        "brand",
-        "price",
-        "description",
-        "img_url",
-        "img_alt",
-        "slug",
-        "category",
-        "features",
-        "images",
-        "case_diameter",
-        "case_thickness",
-        "case_material",
-        "dial_color",
-        "crystal",
-        "movement",
-        "power_reserve",
-        "water_resistance",
-        "bracelet_or_strap",
-        "clasp",
-        "functions"
-      ])
-      .where("slug", "=", slug)
-      .executeTakeFirst();
+export default function ProductDetailPage() {
+  const [product, setProduct] = useState<Products | null>(null);
+  const [loading, setLoading] = useState(true);
 
-    if (!product) {
-      return null;
-    }
+  const { slug } = useParams();
 
-    // Get reviews for the product
-    const reviews = await db
-      .selectFrom("product_reviews")
-      .select(["id", "author", "title", "description", "rating", "created_at"])
-      .where("product_id", "=", product.id)
-      .orderBy("created_at", "desc")
-      .limit(5)
-      .execute();
-
-    // Calculate review statistics
-    const reviewStats = await db
-      .selectFrom("product_reviews")
-      .select([
-        db.fn.avg("rating").as("average"),
-        db.fn.count("id").as("count")
-      ])
-      .where("product_id", "=", product.id)
-      .executeTakeFirst();
-
-    // Calculate review breakdown
-    const reviewBreakdown = [];
-    if (reviewStats && Number(reviewStats.count) > 0) {
-      for (let rating = 1; rating <= 5; rating++) {
-        const ratingCount = await db
-          .selectFrom("product_reviews")
-          .select(db.fn.count("id").as("count"))
-          .where("product_id", "=", product.id)
-          .where("rating", "=", rating)
-          .executeTakeFirstOrThrow();
-
-        const percentage =
-          Number(reviewStats.count) > 0
-            ? (Number(ratingCount.count) / Number(reviewStats.count)) * 100
-            : 0;
-
-        reviewBreakdown.push({
-          rating,
-          percentage: percentage.toString()
-        });
-      }
-    }
-
-    // Format the specifications
-    const specifications = {
-      case_diameter: product.case_diameter,
-      case_thickness: product.case_thickness,
-      case_material: product.case_material,
-      dial_color: product.dial_color,
-      crystal: product.crystal,
-      movement: product.movement,
-      power_reserve: product.power_reserve,
-      water_resistance: product.water_resistance,
-      bracelet_or_strap: product.bracelet_or_strap,
-      clasp: product.clasp,
-      functions: product.functions
-    };
-
-    return {
-      ...product,
-      features: product.features || [],
-      images: product.images || [product.img_url],
-      specifications,
-      reviews: {
-        items: reviews,
-        average: reviewStats?.average || "0",
-        count: Number(reviewStats?.count || 0),
-        breakdown: reviewBreakdown
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`/api/products/${slug}`);
+        const data = await response.json();
+        setProduct(data);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
       }
     };
-  } catch (error) {
-    console.error("Error fetching product:", error);
-    return null;
-  }
-}
 
-export default async function ProductDetailPage({
-  params
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const product = await getProduct(slug);
+    fetchProduct();
+  }, []);
+  // const product = await getProduct(slug);
 
+  if (loading) return <div>Loading...</div>;
   if (!product) {
     notFound();
   }
 
   const productImages = product.images || [product.img_url];
   const features = product.features || [];
+
+  analytics.track(segmentEvents.PRODUCT_VIEWED, product);
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -241,11 +152,29 @@ export default async function ProductDetailPage({
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <Button className="flex-1 gap-2">
+              <Button
+                className="flex-1 gap-2"
+                onClick={() => {
+                  alert("Product added to cart!");
+                  // @ts-ignore
+                  analytics.track(segmentEvents.PRODUCT_ADDED_TO_CART, product);
+                }}
+              >
                 <ShoppingCart className="h-5 w-5" />
                 Add to Cart
               </Button>
-              <Button variant="outline" className="flex-1 gap-2">
+              <Button
+                variant="outline"
+                className="flex-1 gap-2"
+                onClick={() => {
+                  alert("Product added to wishlist!");
+                  // @ts-ignore
+                  analytics.track(
+                    segmentEvents.PRODUCT_ADDED_TO_WISHLIST,
+                    product
+                  );
+                }}
+              >
                 <Heart className="h-5 w-5" />
                 Add to Wishlist
               </Button>
