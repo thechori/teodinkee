@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
-export async function GET() {
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) {
   try {
-    const posts = await db
+    const { slug } = await params;
+
+    const post = await db
       .selectFrom("blog_posts")
+      .where("slug", "=", slug)
       .leftJoin("blog_authors", "blog_authors.id", "blog_posts.author_id")
       .select([
         "blog_posts.id",
@@ -23,16 +29,16 @@ export async function GET() {
         "blog_authors.img_url as author_image",
         "blog_authors.bio as author_bio"
       ])
-      .execute();
+      .executeTakeFirst();
 
-    if (!posts || posts.length === 0) {
+    if (!post) {
       return NextResponse.json(
-        { error: "Blog posts not found" },
+        { error: "Blog post not found" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(posts);
+    return NextResponse.json(post);
   } catch (error) {
     console.error("Error fetching blog post details:", error);
     return NextResponse.json(

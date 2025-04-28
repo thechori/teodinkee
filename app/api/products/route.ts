@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 
 export async function GET() {
   try {
-    let products = await db.selectFrom("products").selectAll().execute();
+    const products = await db.selectFrom("products").selectAll().execute();
 
     return NextResponse.json(products);
   } catch (error) {

@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -10,27 +8,31 @@ import {
   Linkedin,
   Twitter
 } from "lucide-react";
-import { useEffect, useState } from "react";
 //
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { notFound } from "next/navigation";
 import { BlogPosts } from "kysely-codegen";
 
-export default function BlogPostPage() {
-  // todo: get article
-  const [post, setPost] = useState<BlogPosts | null>(null);
-  const [loading, setLoading] = useState(false);
+type Props = {
+  params: Promise<{ slug: string }>;
+};
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      const response = await fetch("/api/blog/");
-    };
+async function getPostBySlug(slug: string): Promise<BlogPosts | null> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/blog/${slug}`
+  );
+  return res.ok ? await res.json() : null;
+}
 
-    fetchPost();
-  }, []);
+// Server Component approach - allows the use of params as a prop that we await
+// requires that we not use client side components and useEffect/useState though
+export default async function BlogPostPage({ params }: Props) {
+  const { slug } = await params;
 
-  if (loading) return <div>Loading...</div>;
+  const post = await getPostBySlug(slug);
+  console.log("post", post);
+
   if (!post) return notFound();
 
   return (
@@ -78,7 +80,7 @@ export default function BlogPostPage() {
               />
             </div>
             <div>
-              <p className="font-medium">{post.author_id}</p>
+              <p className="font-medium">Some Author Name</p>
               <p className="text-sm text-gray-500">Author</p>
             </div>
           </div>
@@ -99,14 +101,7 @@ export default function BlogPostPage() {
 
         {/* Article Content */}
         <div className="max-w-3xl mx-auto mb-12">
-          <div className="prose prose-lg max-w-none">
-            {/* @ts-ignore */}
-            {post.content.map((paragraph, index) => (
-              <p key={index} className="mb-6">
-                {paragraph}
-              </p>
-            ))}
-          </div>
+          <div className="prose prose-lg max-w-none">{post.content}</div>
         </div>
 
         {/* Share Links */}
