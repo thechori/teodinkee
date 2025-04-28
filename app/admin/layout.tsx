@@ -1,18 +1,24 @@
-import { ReactNode } from "react";
+"use client";
+
+import type { ReactNode } from "react";
 import Link from "next/link";
 import {
   BarChart,
+  Megaphone,
   MessageSquare,
   Package,
+  Phone,
   Settings,
   Users
 } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 interface AdminLayoutProps {
   children: ReactNode;
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
+  const pathname = usePathname();
   return (
     <div className="flex min-h-screen">
       {/* Admin Sidebar */}
@@ -44,10 +50,30 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </Link>
           <Link
             href="/admin/sms"
-            className="flex items-center px-4 py-2 text-white bg-gray-800 rounded-md"
+            className={`flex items-center px-4 py-2 text-gray-300 hover:bg-gray-800 rounded-md ${
+              pathname === "/admin/sms" ? "bg-gray-800 text-white" : ""
+            }`}
           >
             <MessageSquare className="mr-3 h-5 w-5" />
             SMS Marketing
+          </Link>
+          <Link
+            href="/admin/voice"
+            className={`flex items-center px-4 py-2 text-gray-300 hover:bg-gray-800 rounded-md ${
+              pathname === "/admin/voice" ? "bg-gray-800 text-white" : ""
+            }`}
+          >
+            <Phone className="mr-3 h-5 w-5" />
+            Voice Calls
+          </Link>
+          <Link
+            href="/admin/marketing"
+            className={`flex items-center px-4 py-2 text-gray-300 hover:bg-gray-800 rounded-md ${
+              pathname === "/admin/marketing" ? "bg-gray-800 text-white" : ""
+            }`}
+          >
+            <Megaphone className="mr-3 h-5 w-5" />
+            Marketing
           </Link>
           <Link
             href="/admin/settings"
