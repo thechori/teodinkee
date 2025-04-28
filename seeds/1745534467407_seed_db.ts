@@ -5,12 +5,10 @@ import { productCategory } from "../data";
 
 export async function seed(db: Kysely<DB>) {
   // Clean tables
-  await db.deleteFrom("related_blog_posts").execute();
   await db.deleteFrom("blog_posts").execute();
   await db.deleteFrom("blog_authors").execute();
   await db.deleteFrom("order_products").execute();
   await db.deleteFrom("orders").execute();
-  await db.deleteFrom("related_products").execute();
   await db.deleteFrom("collection_products").execute();
   await db.deleteFrom("collections").execute();
   await db.deleteFrom("product_reviews").execute();
@@ -55,98 +53,119 @@ export async function seed(db: Kysely<DB>) {
       water_resistance: "300m",
       bracelet_or_strap: "Oystersteel Bracelet",
       clasp: "Folding",
-      functions: "Date, Rotating Bezel"
+      functions: "Date, Rotating Bezel",
+      featured: true
     })
     .returningAll()
     .execute();
 
-  const [secondProduct] = await db
+  await db
     .insertInto("products")
-    .values({
-      name: "Seamaster",
-      brand: "Omega",
-      price: 575000,
-      slug: "omega-seamaster",
-      category: productCategory.SPORT,
-      img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/aqua-explorer-omega-seamaster-aqua-terra-GXdlQ3IjUHMMUUKzAERhwaFvpk0ZAj.jpg",
-      img_alt: "Omega Seamaster",
-      description: "Renowned diving watch by Omega.",
-      // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
-      features: sql`ARRAY['Wave Dial', 'Helium Escape Valve']`,
-      images: sql`ARRAY['https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/aqua-explorer-omega-seamaster-aqua-terra-GXdlQ3IjUHMMUUKzAERhwaFvpk0ZAj.jpg', 'https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/aqua-explorer-omega-seamaster-aqua-terra-2-rv0ROd8wCzjNvpdYLUvmXBfzvMQngT.png']`,
-      case_diameter: "42mm",
-      case_thickness: "13.5mm",
-      case_material: "Stainless Steel",
-      dial_color: "Blue",
-      crystal: "Sapphire",
-      movement: "Automatic",
-      power_reserve: "55 hours",
-      water_resistance: "300m",
-      bracelet_or_strap: "Stainless Bracelet",
-      clasp: "Foldover",
-      functions: "Date, Rotating Bezel"
-    })
-    .returningAll()
-    .execute();
-
-  const [thirdProduct] = await db
-    .insertInto("products")
-    .values({
-      name: "Carrera",
-      brand: "Tag Heuer",
-      price: 660000,
-      slug: "tag-heuer-carrera",
-      category: productCategory.SPORT,
-      img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
-      img_alt: "Tag Heuer Carrera",
-      description: "Renowned racing watch by Tag Heuer.",
-      // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
-      features: sql`ARRAY['Chronograph', 'Helium Escape Valve']`,
-      images: sql`ARRAY['https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif', 'https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-2-jpkgtmjSiMPHPPNr6ApK2GSRAFlTLI.png']`,
-      case_diameter: "42mm",
-      case_thickness: "13.5mm",
-      case_material: "Stainless Steel",
-      dial_color: "Black",
-      crystal: "Sapphire",
-      movement: "Automatic",
-      power_reserve: "35 hours",
-      water_resistance: "100m",
-      bracelet_or_strap: "Stainless Bracelet",
-      clasp: "Foldover",
-      functions: "Date, Chronograph"
-    })
-    .returningAll()
-    .execute();
-
-  const [fourthProduct] = await db
-    .insertInto("products")
-    .values({
-      name: "Big Pilot",
-      brand: "IWC",
-      price: 1250000,
-      slug: "iwc-big-pilot",
-      category: productCategory.PILOT,
-      img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/pilot-chronometer-iwc-big-pilot-Trh3XiQTw0oFbH7wkQTeJ6CJ5j7vP5.avif",
-      img_alt: "IWC Big Pilot",
-      description: "Preferred watch by pilots in the Air Force.",
-      // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
-      features: sql`ARRAY['Utility', 'Helium Escape Valve']`,
-      images: sql`ARRAY['https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/pilot-chronometer-iwc-big-pilot-Trh3XiQTw0oFbH7wkQTeJ6CJ5j7vP5.avif', 'https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/pilot-chronometer-iwc-big-pilot-2-ZxrbdO6Lg2zTA7hOEURnc3K35Bpk87.jpg']`,
-      case_diameter: "48mm",
-      case_thickness: "13.5mm",
-      case_material: "Stainless Steel",
-      dial_color: "Black",
-      crystal: "Sapphire",
-      movement: "Automatic",
-      power_reserve: "35 hours",
-      water_resistance: "100m",
-      bracelet_or_strap: "Leather Strap",
-      clasp: "Foldover",
-      functions: "Visibility, Utility"
-    })
+    .values([
+      {
+        name: "Seamaster",
+        brand: "Omega",
+        price: 575000,
+        slug: "omega-seamaster",
+        category: productCategory.SPORT,
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/aqua-explorer-omega-seamaster-aqua-terra-GXdlQ3IjUHMMUUKzAERhwaFvpk0ZAj.jpg",
+        img_alt: "Omega Seamaster",
+        description: "Renowned diving watch by Omega.",
+        // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
+        features: sql`ARRAY['Wave Dial', 'Helium Escape Valve']`,
+        images: sql`ARRAY['https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/aqua-explorer-omega-seamaster-aqua-terra-GXdlQ3IjUHMMUUKzAERhwaFvpk0ZAj.jpg', 'https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/aqua-explorer-omega-seamaster-aqua-terra-2-rv0ROd8wCzjNvpdYLUvmXBfzvMQngT.png']`,
+        case_diameter: "42mm",
+        case_thickness: "13.5mm",
+        case_material: "Stainless Steel",
+        dial_color: "Blue",
+        crystal: "Sapphire",
+        movement: "Automatic",
+        power_reserve: "55 hours",
+        water_resistance: "300m",
+        bracelet_or_strap: "Stainless Bracelet",
+        clasp: "Foldover",
+        functions: "Date, Rotating Bezel",
+        featured: true
+      },
+      {
+        name: "Carrera",
+        brand: "Tag Heuer",
+        price: 660000,
+        slug: "tag-heuer-carrera",
+        category: productCategory.SPORT,
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
+        img_alt: "Tag Heuer Carrera",
+        description: "Renowned racing watch by Tag Heuer.",
+        // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
+        features: sql`ARRAY['Chronograph', 'Helium Escape Valve']`,
+        images: sql`ARRAY['https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif', 'https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-2-jpkgtmjSiMPHPPNr6ApK2GSRAFlTLI.png']`,
+        case_diameter: "42mm",
+        case_thickness: "13.5mm",
+        case_material: "Stainless Steel",
+        dial_color: "Black",
+        crystal: "Sapphire",
+        movement: "Automatic",
+        power_reserve: "35 hours",
+        water_resistance: "100m",
+        bracelet_or_strap: "Stainless Bracelet",
+        clasp: "Foldover",
+        functions: "Date, Chronograph",
+        featured: true
+      },
+      {
+        name: "Big Pilot",
+        brand: "IWC",
+        price: 1250000,
+        slug: "iwc-big-pilot",
+        category: productCategory.PILOT,
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/pilot-chronometer-iwc-big-pilot-Trh3XiQTw0oFbH7wkQTeJ6CJ5j7vP5.avif",
+        img_alt: "IWC Big Pilot",
+        description: "Preferred watch by pilots in the Air Force.",
+        // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
+        features: sql`ARRAY['Utility', 'Helium Escape Valve']`,
+        images: sql`ARRAY['https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/pilot-chronometer-iwc-big-pilot-Trh3XiQTw0oFbH7wkQTeJ6CJ5j7vP5.avif', 'https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/pilot-chronometer-iwc-big-pilot-2-ZxrbdO6Lg2zTA7hOEURnc3K35Bpk87.jpg']`,
+        case_diameter: "48mm",
+        case_thickness: "13.5mm",
+        case_material: "Stainless Steel",
+        dial_color: "Black",
+        crystal: "Sapphire",
+        movement: "Automatic",
+        power_reserve: "35 hours",
+        water_resistance: "100m",
+        bracelet_or_strap: "Leather Strap",
+        clasp: "Foldover",
+        functions: "Visibility, Utility",
+        featured: true
+      },
+      {
+        name: "A158WA",
+        brand: "Casio",
+        price: 1995,
+        slug: "casio-digital-watch",
+        category: productCategory.BUDGET,
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/casio-2-IDbZpdPvMQEzHrFjhN7bIwV4THqRy9.webp",
+        img_alt: "Casio Digital Watch",
+        description: "Cheap, hip, always in style.",
+        // @ts-ignore this is an error in kysely-codegen - the DB is proper, the TS type is wrong
+        features: sql`ARRAY['Cheap', 'Quartz Movement']`,
+        images: sql`ARRAY['https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/casio-2-IDbZpdPvMQEzHrFjhN7bIwV4THqRy9.webp','https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/casio-1-D5pgvkREMYLk1R7cR6vi8MWYUQ6oFO.webp', 'https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/casio-3-WVMzPvRpBEbYxZPCD95fMp77Ehn5wt.webp']`,
+        case_diameter: "36mm",
+        case_thickness: "13.5mm",
+        case_material: "Aluminum",
+        dial_color: "Black",
+        crystal: "Plastic",
+        movement: "Quartz",
+        power_reserve: "1000 hours",
+        water_resistance: "10m",
+        bracelet_or_strap: "Aluminum Band",
+        clasp: "Foldover",
+        functions: "Electronic, Utility"
+      }
+    ])
     .returningAll()
     .execute();
 
@@ -240,63 +259,48 @@ export async function seed(db: Kysely<DB>) {
     .returningAll()
     .execute();
 
-  const [blogPost] = await db
-    .insertInto("blog_posts")
-    .values({
-      featured: true,
-      title: "Top Dive Watches of 2025",
-      slug: "top-dive-watches-2025",
-      excerpt: "We reviewed the best dive watches...",
-      content: "Here’s our deep dive into dive watches...",
-      img_alt: "Dive Watch",
-      img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-top-dive-watches-ieot2aYD39yUsQLxAfCSBIxFlwvykJ.avif",
-      author_id: author.id,
-      category: productCategory.DIVER,
-      read_time: "5 min"
-    })
-    .returningAll()
-    .execute();
-
-  const [secondBlogPost] = await db
-    .insertInto("blog_posts")
-    .values({
-      featured: true,
-      title: "Best Watches Under $1000",
-      slug: "best-watches-under-1000",
-      excerpt: "Affordable yet stylish timepieces.",
-      content: "A roundup of the best budget watches...",
-      img_alt: "Affordable Watch",
-      img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-watches-under-1000-RNkFrWsOS3vJxVk4vOy8sso1yGjkYE.webp",
-      author_id: author.id,
-      category: productCategory.BUDGET,
-      read_time: "4 min"
-    })
-    .returningAll()
-    .execute();
-
-  const [thirdBlogPost] = await db
-    .insertInto("blog_posts")
-    .values({
-      title: "Why John Mayer Loves Watches",
-      featured: true,
-      slug: "why-john-mayer-loves-watches",
-      excerpt: "John Mayer makes great music. He also loves watches..",
-      content: "Your timeeeepiece is a wonderlandddd...",
-      img_alt: "John Mayer and Watch",
-      img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-john-mayer-watches-ABqZgoMSCc7m39ol4dRCGzD7B2rzXT.webp",
-      author_id: author.id,
-      category: productCategory.PILOT,
-      read_time: "2 min"
-    })
-    .returningAll()
-    .execute();
-
   await db
     .insertInto("blog_posts")
     .values([
+      {
+        featured: true,
+        title: "Top Dive Watches of 2025",
+        slug: "top-dive-watches-2025",
+        excerpt: "We reviewed the best dive watches...",
+        content: "Here’s our deep dive into dive watches...",
+        img_alt: "Dive Watch",
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-top-dive-watches-ieot2aYD39yUsQLxAfCSBIxFlwvykJ.avif",
+        author_id: author.id,
+        category: productCategory.DIVER,
+        read_time: "5 min"
+      },
+      {
+        title: "Why John Mayer Loves Watches",
+        featured: true,
+        slug: "why-john-mayer-loves-watches",
+        excerpt: "John Mayer makes great music. He also loves watches..",
+        content: "Your timeeeepiece is a wonderlandddd...",
+        img_alt: "John Mayer and Watch",
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-john-mayer-watches-ABqZgoMSCc7m39ol4dRCGzD7B2rzXT.webp",
+        author_id: author.id,
+        category: productCategory.PILOT,
+        read_time: "2 min"
+      },
+      {
+        featured: true,
+        title: "Best Watches Under $1000",
+        slug: "best-watches-under-1000",
+        excerpt: "Affordable yet stylish timepieces.",
+        content: "A roundup of the best budget watches...",
+        img_alt: "Affordable Watch",
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-watches-under-1000-RNkFrWsOS3vJxVk4vOy8sso1yGjkYE.webp",
+        author_id: author.id,
+        category: productCategory.BUDGET,
+        read_time: "4 min"
+      },
       {
         title: "The Renaissance of Mechanical Watchmaking in the Digital Age",
         slug: "renaissance-mechanical-watchmaking",
@@ -343,17 +347,17 @@ export async function seed(db: Kysely<DB>) {
         published_at: new Date("2023-04-28")
       },
       {
-        title: "The Rise of Independent Watchmakers",
-        slug: "rise-of-independent-watchmakers",
+        title: "The World's Cheapest Watch?",
+        slug: "worlds-cheapest-watch",
         excerpt:
-          "Discover the small ateliers creating some of the most innovative designs in horology, challenging the dominance of established brands.",
+          "Check out this $2 watch that's made in China and learn about how it took the world by storm.",
         content:
           "Independent watchmakers are making waves with unique designs and boundary-pushing innovations.",
         img_alt: "watchmaker working at desk with tools",
         img_url:
           "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
         author_id: author.id,
-        category: "Industry",
+        category: productCategory.BUDGET,
         read_time: "7 min read",
         published_at: new Date("2023-04-10")
       },
@@ -402,22 +406,6 @@ export async function seed(db: Kysely<DB>) {
         published_at: new Date("2023-02-18")
       }
     ])
-    .execute();
-
-  await db
-    .insertInto("related_blog_posts")
-    .values({
-      blog_post_id: blogPost.id,
-      related_post_id: secondBlogPost.id
-    })
-    .execute();
-
-  await db
-    .insertInto("related_products")
-    .values({
-      product_id: product.id,
-      related_product_id: secondProduct.id
-    })
     .execute();
 
   console.log("✅ MVP seed data inserted successfully.");

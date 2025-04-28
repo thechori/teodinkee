@@ -7,19 +7,10 @@ import { Heart, ShoppingCart } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-
-type Product = {
-  id: number;
-  name: string;
-  brand: string;
-  price: number;
-  img_url: string;
-  img_alt: string | null;
-  slug: string;
-};
+import { Products } from "kysely-codegen";
 
 export default function FeaturedProducts() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Products[]>([]);
   const [wishlist, setWishlist] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,7 +21,8 @@ export default function FeaturedProducts() {
         const response = await fetch("/api/products");
         if (!response.ok) throw new Error("Failed to fetch products");
         const data = await response.json();
-        setProducts(data.products);
+        setProducts(data);
+        console.log(data);
       } catch (error) {
         console.error("Error loading featured products:", error);
       } finally {
@@ -74,54 +66,59 @@ export default function FeaturedProducts() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-      {products.map((product) => (
-        <div key={product.id} className="group relative">
-          <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-4">
-            <Link href={`/products/${product.slug}`}>
-              <Image
-                src={product.img_url || "/placeholder.svg"}
-                alt={product.img_alt || product.name}
-                width={600}
-                height={600}
-                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-              />
-            </Link>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm hover:bg-white rounded-full"
-              onClick={() => toggleWishlist(product.id)}
-            >
-              <Heart
-                className={`h-5 w-5 ${
-                  wishlist.includes(product.id)
-                    ? "fill-red-500 text-red-500"
-                    : "text-gray-600"
-                }`}
-              />
-              <span className="sr-only">Add to wishlist</span>
-            </Button>
-          </div>
-          <div>
-            <Link href={`/products/${product.slug}`} className="block">
-              <h3 className="text-lg font-medium">{product.name}</h3>
-              <p className="text-sm text-gray-500 mb-2">{product.brand}</p>
-            </Link>
-            <div className="flex justify-between items-center">
-              <p className="font-medium">${product.price.toLocaleString()}</p>
+      {products
+        .filter((p) => p.featured)
+        .map((product) => (
+          // @ts-ignore
+          <div key={product.id} className="group relative">
+            <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-4">
+              <Link href={`/products/${product.slug}`}>
+                <Image
+                  src={product.img_url || "/placeholder.svg"}
+                  alt={product.img_alt || product.name}
+                  width={600}
+                  height={600}
+                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                />
+              </Link>
               <Button
-                variant="outline"
-                size="sm"
-                className="rounded-full"
-                onClick={() => addToCart(product.name)}
+                variant="ghost"
+                size="icon"
+                className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm hover:bg-white rounded-full"
+                // @ts-ignore
+                onClick={() => toggleWishlist(product.id)}
               >
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                Add
+                <Heart
+                  className={`h-5 w-5 ${
+                    // @ts-ignore
+                    wishlist.includes(product.id)
+                      ? "fill-red-500 text-red-500"
+                      : "text-gray-600"
+                  }`}
+                />
+                <span className="sr-only">Add to wishlist</span>
               </Button>
             </div>
+            <div>
+              <Link href={`/products/${product.slug}`} className="block">
+                <h3 className="text-lg font-medium">{product.name}</h3>
+                <p className="text-sm text-gray-500 mb-2">{product.brand}</p>
+              </Link>
+              <div className="flex justify-between items-center">
+                <p className="font-medium">${product.price.toLocaleString()}</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full"
+                  onClick={() => addToCart(product.name)}
+                >
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  Add
+                </Button>
+              </div>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 }

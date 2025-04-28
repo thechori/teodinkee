@@ -84,26 +84,6 @@ export async function GET(
       }
     }
 
-    // Get related products
-    const relatedProductIds = await db
-      .selectFrom("related_products")
-      .select(["related_product_id"])
-      .where("product_id", "=", product.id)
-      .execute();
-
-    const relatedProducts =
-      relatedProductIds.length > 0
-        ? await db
-            .selectFrom("products")
-            .select(["id", "name", "price", "img_url", "img_alt", "slug"])
-            .where(
-              "id",
-              "in",
-              relatedProductIds.map((rp) => rp.related_product_id)
-            )
-            .execute()
-        : [];
-
     // Format the response
     const specifications = {
       case_diameter: product.case_diameter,
@@ -137,8 +117,7 @@ export async function GET(
         average: reviewStats?.average || "0",
         count: Number(reviewStats?.count || 0),
         breakdown: reviewBreakdown
-      },
-      relatedProducts
+      }
     });
   } catch (error) {
     console.error("Error fetching product details:", error);

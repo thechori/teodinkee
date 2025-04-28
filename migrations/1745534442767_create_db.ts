@@ -45,6 +45,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("bracelet_or_strap", "varchar(255)")
     .addColumn("clasp", "varchar(255)")
     .addColumn("functions", "text")
+    .addColumn("featured", "boolean", (col) => col.defaultTo(false))
     .execute();
 
   // Create product_reviews table
@@ -86,25 +87,6 @@ export async function up(db: Kysely<any>): Promise<void> {
       "collection_id",
       "product_id"
     ])
-    .execute();
-
-  // Create related_products junction table
-  await db.schema
-    .createTable("related_products")
-    .addColumn("product_id", "integer", (col) =>
-      col.references("products.id").onDelete("cascade").notNull()
-    )
-    .addColumn("related_product_id", "integer", (col) =>
-      col.references("products.id").onDelete("cascade").notNull()
-    )
-    .addPrimaryKeyConstraint("related_products_pkey", [
-      "product_id",
-      "related_product_id"
-    ])
-    .addCheckConstraint(
-      "different_products_check",
-      sql`product_id <> related_product_id`
-    )
     .execute();
 
   // Create orders table
@@ -177,7 +159,6 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable("blog_authors").execute();
   await db.schema.dropTable("order_products").execute();
   await db.schema.dropTable("orders").execute();
-  await db.schema.dropTable("related_products").execute();
   await db.schema.dropTable("collection_products").execute();
   await db.schema.dropTable("collections").execute();
   await db.schema.dropTable("product_reviews").execute();

@@ -13,8 +13,6 @@ import {
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/lib/db";
-// import ProductReviews from "@/components/product/product-reviews";
-// import RelatedProducts from "@/components/product/related-products";
 
 async function getProduct(slug: string) {
   try {
@@ -253,7 +251,12 @@ export default async function ProductDetailPage({
               </Button>
             </div>
 
-            <Accordion type="single" collapsible className="w-full">
+            <Accordion
+              type="single"
+              collapsible
+              className="w-full"
+              defaultValue="specifications"
+            >
               <AccordionItem value="specifications">
                 <AccordionTrigger>Specifications</AccordionTrigger>
                 <AccordionContent>
@@ -305,17 +308,6 @@ export default async function ProductDetailPage({
         </div>
 
         <Separator className="my-16" />
-
-        {/* Reviews Section */}
-        {/* <ProductReviews
-          productId={product.id}
-          reviewSummary={product.reviews}
-        /> */}
-
-        <Separator className="my-16" />
-
-        {/* Related Products */}
-        {/* <RelatedProducts productId={product.id} /> */}
       </div>
     </div>
   );
