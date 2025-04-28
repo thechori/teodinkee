@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -11,29 +13,41 @@ import {
 //
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { BlogPosts } from "kysely-codegen";
 import { analytics, segmentEvents } from "@/lib/analytics";
+import { useEffect, useState } from "react";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
-async function getPostBySlug(slug: string): Promise<BlogPosts | null> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/blog/${slug}`
-  );
-  return res.ok ? await res.json() : null;
-}
+export default function BlogPostPage() {
+  const [post, setPost] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-// Server Component approach - allows the use of params as a prop that we await
-// requires that we not use client side components and useEffect/useState though
-export default async function BlogPostPage({ params }: Props) {
-  const { slug } = await params;
+  const { slug } = useParams();
 
-  const post = await getPostBySlug(slug);
+  useEffect(() => {
+    const fetchPostBySlug = async () => {
+      try {
+        const response = await fetch(`/api/blog/${slug}`);
+        const data = await response.json();
+        setPost(data);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!post) return notFound();
+    fetchPostBySlug();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (!post) {
+    notFound();
+  }
 
   analytics.track(segmentEvents.ARTICLE_VIEWED, post);
 

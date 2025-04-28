@@ -9,7 +9,7 @@ export async function GET() {
     // get customers enrolled from db
 
     const twiml = `<Response>
-        <Say voice="Polly.Joanna">"IT'S ON! Your weekly Teodinkee flash coupon is live for the next hour. Hurry up and claim it now! 5% off with code 'FS12251'</Say>
+        <Say voice="Polly.Joanna">IT'S ON! Your weekly Teodinkee flash coupon is live for the next hour. Hurry up and claim it now! 5% off with code 'FS12251'</Say>
         <Hangup/>
      </Response>`;
 
