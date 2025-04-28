@@ -17,6 +17,7 @@ export async function GET() {
         "blog_posts.published_at",
         "blog_posts.read_time",
         "blog_posts.category",
+        "blog_posts.featured",
         "blog_authors.id as author_id",
         "blog_authors.name as author_name",
         "blog_authors.img_url as author_image", // Changed from image to img_url

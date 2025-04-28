@@ -5,7 +5,7 @@ import { ArrowRight, Clock, Package, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FeaturedProducts from "@/components/product/featured-products";
 import NewsletterSignup from "@/components/newsletter-signup";
-import LatestBlogPosts from "@/components/blog-posts/latest-blog-posts";
+import FeaturedBlogPosts from "@/components/blog-posts/featured-blog-posts";
 import FeaturedCollections from "@/components/collections/featured-collections";
 
 export default function HomePage() {
@@ -139,7 +139,7 @@ export default function HomePage() {
             </Link>
           </div>
           <div>
-            <LatestBlogPosts />
+            <FeaturedBlogPosts />
           </div>
         </div>
       </section>

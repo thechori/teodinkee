@@ -353,6 +353,7 @@ export async function seed(db: Kysely<DB>) {
   const [blogPost] = await db
     .insertInto("blog_posts")
     .values({
+      featured: true,
       title: "Top Dive Watches of 2025",
       slug: "top-dive-watches-2025",
       excerpt: "We reviewed the best dive watches...",
@@ -370,6 +371,7 @@ export async function seed(db: Kysely<DB>) {
   const [secondBlogPost] = await db
     .insertInto("blog_posts")
     .values({
+      featured: true,
       title: "Best Watches Under $1000",
       slug: "best-watches-under-1000",
       excerpt: "Affordable yet stylish timepieces.",
@@ -388,6 +390,7 @@ export async function seed(db: Kysely<DB>) {
     .insertInto("blog_posts")
     .values({
       title: "Why John Mayer Loves Watches",
+      featured: true,
       slug: "why-john-mayer-loves-watches",
       excerpt: "John Mayer makes great music. He also loves watches..",
       content: "Your timeeeepiece is a wonderlandddd...",
