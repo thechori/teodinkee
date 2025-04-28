@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export function GET() {
   // In a real application, this data would come from a database
   const locations = [
     {

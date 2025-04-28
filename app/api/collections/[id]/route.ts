@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 import { db } from "@/lib/db";
 
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const collectionId = Number.parseInt(params.id);
+    // await the params promise to get your route params
+    const { id } = await params;
+    const collectionId = Number.parseInt(id, 10);
 
-    // Get the collection
+    // Fetch the collection
     const collection = await db
       .selectFrom("collections")
       .select(["id", "name", "description", "img_url", "img_alt"])
@@ -22,10 +25,10 @@ export async function GET(
       );
     }
 
-    // Get products in this collection
+    // Fetch products in this collection
     const productIds = await db
       .selectFrom("collection_products")
-      .select(["product_id"])
+      .select("product_id")
       .where("collection_id", "=", collectionId)
       .execute();
 

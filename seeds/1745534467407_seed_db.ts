@@ -238,57 +238,6 @@ export async function seed(db: Kysely<DB>) {
     .returningAll()
     .execute();
 
-  const [blogPost] = await db
-    .insertInto("blog_posts")
-    .values({
-      title: "Top Dive Watches of 2025",
-      slug: "top-dive-watches-2025",
-      excerpt: "We reviewed the best dive watches...",
-      content: "Here’s our deep dive into dive watches...",
-      img_alt: "Dive Watch",
-      img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-top-dive-watches-ieot2aYD39yUsQLxAfCSBIxFlwvykJ.avif",
-      author_id: author.id,
-      category: "Reviews",
-      read_time: "5 min"
-    })
-    .returningAll()
-    .execute();
-
-  const [secondBlogPost] = await db
-    .insertInto("blog_posts")
-    .values({
-      title: "Best Watches Under $1000",
-      slug: "best-watches-under-1000",
-      excerpt: "Affordable yet stylish timepieces.",
-      content: "A roundup of the best budget watches...",
-      img_alt: "Affordable Watch",
-      img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-watches-under-1000-RNkFrWsOS3vJxVk4vOy8sso1yGjkYE.webp",
-      author_id: author.id,
-      category: "Buying Guides",
-      read_time: "4 min"
-    })
-    .returningAll()
-    .execute();
-
-  const [thirdBlogPost] = await db
-    .insertInto("blog_posts")
-    .values({
-      title: "Why John Mayer Loves Watches",
-      slug: "why-john-mayer-loves-watches",
-      excerpt: "John Mayer makes great music. He also loves watches..",
-      content: "Your timeeeepiece is a wonderlandddd...",
-      img_alt: "John Mayer and Watch",
-      img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-john-mayer-watches-ABqZgoMSCc7m39ol4dRCGzD7B2rzXT.webp",
-      author_id: author.id,
-      category: "Fun Piece",
-      read_time: "2 min"
-    })
-    .returningAll()
-    .execute();
-
   await db
     .insertInto("blog_posts")
     .values([
@@ -399,6 +348,57 @@ export async function seed(db: Kysely<DB>) {
         published_at: new Date("2023-02-18")
       }
     ])
+    .execute();
+
+  const [blogPost] = await db
+    .insertInto("blog_posts")
+    .values({
+      title: "Top Dive Watches of 2025",
+      slug: "top-dive-watches-2025",
+      excerpt: "We reviewed the best dive watches...",
+      content: "Here’s our deep dive into dive watches...",
+      img_alt: "Dive Watch",
+      img_url:
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-top-dive-watches-ieot2aYD39yUsQLxAfCSBIxFlwvykJ.avif",
+      author_id: author.id,
+      category: "Reviews",
+      read_time: "5 min"
+    })
+    .returningAll()
+    .execute();
+
+  const [secondBlogPost] = await db
+    .insertInto("blog_posts")
+    .values({
+      title: "Best Watches Under $1000",
+      slug: "best-watches-under-1000",
+      excerpt: "Affordable yet stylish timepieces.",
+      content: "A roundup of the best budget watches...",
+      img_alt: "Affordable Watch",
+      img_url:
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-watches-under-1000-RNkFrWsOS3vJxVk4vOy8sso1yGjkYE.webp",
+      author_id: author.id,
+      category: "Buying Guides",
+      read_time: "4 min"
+    })
+    .returningAll()
+    .execute();
+
+  const [thirdBlogPost] = await db
+    .insertInto("blog_posts")
+    .values({
+      title: "Why John Mayer Loves Watches",
+      slug: "why-john-mayer-loves-watches",
+      excerpt: "John Mayer makes great music. He also loves watches..",
+      content: "Your timeeeepiece is a wonderlandddd...",
+      img_alt: "John Mayer and Watch",
+      img_url:
+        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-john-mayer-watches-ABqZgoMSCc7m39ol4dRCGzD7B2rzXT.webp",
+      author_id: author.id,
+      category: "Fun Piece",
+      read_time: "2 min"
+    })
+    .returningAll()
     .execute();
 
   await db

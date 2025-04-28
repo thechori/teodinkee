@@ -5,7 +5,6 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
-    const featured = searchParams.get("featured") === "true";
     const limit = Number.parseInt(searchParams.get("limit") || "12");
     const page = Number.parseInt(searchParams.get("page") || "1");
     const offset = (page - 1) * limit;

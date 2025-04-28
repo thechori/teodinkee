@@ -277,8 +277,8 @@ export default async function ProductsPage() {
                 >
                   <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-4">
                     <Image
-                      src={`/abstract-geometric-shapes.png?height=600&width=600&query=${product.image}`}
-                      alt={product.name}
+                      src={`${product.img_url}?height=600&width=600`}
+                      alt={product.img_alt || product.name}
                       width={600}
                       height={600}
                       className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"

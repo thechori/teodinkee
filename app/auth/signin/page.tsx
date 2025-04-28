@@ -30,6 +30,7 @@ export default function SignInPage() {
       // Let NextAuth handle the redirect
       await signIn("google", { callbackUrl });
     } catch (error) {
+      console.log(error);
       toast.error("Error", {
         description: "Failed to sign in with Google. Please try again."
       });

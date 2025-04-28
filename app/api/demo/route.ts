@@ -1,15 +1,12 @@
 import env from "@/config/env.server";
 import { twilioClient } from "@/lib/twilio";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 //
 
 // send sms to customer about flash deal
-export async function GET(request: NextRequest) {
+export async function GET() {
   console.log("GET api/demo - sending from: ", env.TWILIO_SENDER_PHONE_NUMBER);
   try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-
     // get customers enrolled from db
 
     // send all customers sms

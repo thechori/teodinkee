@@ -14,7 +14,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/lib/db";
 // import ProductReviews from "@/components/product/product-reviews";
-import RelatedProducts from "@/components/product/related-products";
+// import RelatedProducts from "@/components/product/related-products";
 
 async function getProduct(slug: string) {
   try {
@@ -130,7 +130,7 @@ async function getProduct(slug: string) {
 export default async function ProductDetailPage({
   params
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
   const product = await getProduct(slug);
@@ -260,7 +260,7 @@ export default async function ProductDetailPage({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {product.specifications &&
                       Object.entries(product.specifications)
-                        .filter(([_, value]) => value !== null)
+                        .filter(([, value]) => value !== null)
                         .map(([key, value]) => (
                           <div key={key}>
                             <p className="text-sm text-gray-500">

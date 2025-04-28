@@ -64,6 +64,8 @@ export default function BlogPage() {
 
   const featuredPost = blogPosts[0];
 
+  if (isLoading) return <div>Loading...</div>;
+
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
