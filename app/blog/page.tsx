@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Calendar, Clock, Search } from "lucide-react";
@@ -20,84 +22,9 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-
-// Mock blog post data
-const featuredPost = {
-  title: "The Renaissance of Mechanical Watchmaking in the Digital Age",
-  excerpt:
-    "Despite the rise of smartwatches and digital technology, mechanical watches are experiencing a remarkable resurgence. We explore the factors driving this renaissance and why traditional horology continues to captivate enthusiasts worldwide.",
-  image: "watchmaker working on mechanical watch movement with loupe",
-  date: "June 5, 2023",
-  readTime: "8 min read",
-  author: {
-    name: "Jonathan Pierce",
-    image: "professional male portrait with glasses"
-  },
-  slug: "renaissance-mechanical-watchmaking"
-};
-
-const blogPosts = [
-  {
-    title: "The Art of Mechanical Movements",
-    excerpt:
-      "Exploring the intricate craftsmanship behind today's finest mechanical watch movements and the centuries of tradition they represent.",
-    image: "close up of watch movement gears",
-    date: "May 15, 2023",
-    readTime: "6 min read",
-    category: "Craftsmanship",
-    slug: "art-of-mechanical-movements"
-  },
-  {
-    title: "Investing in Luxury Watches",
-    excerpt:
-      "How certain timepieces have become more than accessories, but valuable investment assets that appreciate over time.",
-    image: "luxury watches displayed in collection case",
-    date: "April 28, 2023",
-    readTime: "5 min read",
-    category: "Investment",
-    slug: "investing-in-luxury-watches"
-  },
-  {
-    title: "The Rise of Independent Watchmakers",
-    excerpt:
-      "Discover the small ateliers creating some of the most innovative designs in horology, challenging the dominance of established brands.",
-    image: "watchmaker working at desk with tools",
-    date: "April 10, 2023",
-    readTime: "7 min read",
-    category: "Industry",
-    slug: "rise-of-independent-watchmakers"
-  },
-  {
-    title: "Understanding Watch Complications",
-    excerpt:
-      "A comprehensive guide to watch complications, from simple date displays to intricate perpetual calendars and minute repeaters.",
-    image: "complicated watch movement showing multiple complications",
-    date: "March 22, 2023",
-    readTime: "9 min read",
-    category: "Education",
-    slug: "understanding-watch-complications"
-  },
-  {
-    title: "The History of Dive Watches",
-    excerpt:
-      "From military necessity to style statement: tracing the evolution of the dive watch from its utilitarian origins to modern luxury.",
-    image: "vintage and modern dive watches side by side",
-    date: "March 5, 2023",
-    readTime: "6 min read",
-    category: "History",
-    slug: "history-of-dive-watches"
-  },
-  {
-    title: "Watch Care and Maintenance",
-    excerpt:
-      "Essential tips for keeping your timepiece in perfect condition, from daily care to professional servicing schedules.",
-    image: "watch being serviced by watchmaker",
-    date: "February 18, 2023",
-    readTime: "4 min read",
-    category: "Guides",
-    slug: "watch-care-maintenance"
-  }
-];
+import { useEffect, useState } from "react";
+import { BlogPosts } from "kysely-codegen";
+import { notFound } from "next/navigation";
 
 const categories = [
   "All Categories",
@@ -112,6 +39,31 @@ const categories = [
 ];
 
 export default function BlogPage() {
+  const [blogPosts, setBlogPosts] = useState<BlogPosts[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load products
+  useEffect(() => {
+    const loadBlogPosts = async () => {
+      try {
+        const response = await fetch("/api/blog");
+        if (!response.ok) throw new Error("Failed to fetch blogPosts");
+        const data = await response.json();
+        setBlogPosts(data);
+      } catch (error) {
+        console.error("Error loading featured blogPosts:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadBlogPosts();
+  }, []);
+
+  if (!blogPosts || blogPosts.length === 0) return notFound;
+
+  const featuredPost = blogPosts[0];
+
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -172,8 +124,8 @@ export default function BlogPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
               <div className="aspect-[16/9] relative rounded-lg overflow-hidden">
                 <Image
-                  src={`/abstract-geometric-shapes.png?height=600&width=900&query=${featuredPost.image}`}
-                  alt={featuredPost.title}
+                  src={`/abstract-geometric-shapes.png?height=600&width=900&query=${featuredPost.img_url}`}
+                  alt={featuredPost.img_alt || "cool watch photo"}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -182,11 +134,12 @@ export default function BlogPage() {
                 <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
                   <span className="flex items-center">
                     <Calendar className="h-4 w-4 mr-1" />
-                    {featuredPost.date}
+                    {new Date().toLocaleDateString()}
+                    {/* {featuredPost.published_at} */}
                   </span>
                   <span className="flex items-center">
                     <Clock className="h-4 w-4 mr-1" />
-                    {featuredPost.readTime}
+                    {featuredPost.read_time}
                   </span>
                 </div>
                 <h2 className="text-3xl font-serif font-bold mb-4 group-hover:text-gray-700">
@@ -196,14 +149,15 @@ export default function BlogPage() {
                 <div className="flex items-center gap-3 mb-6">
                   <div className="h-10 w-10 rounded-full overflow-hidden relative">
                     <Image
-                      src={`/abstract-geometric-shapes.png?height=40&width=40&query=${featuredPost.author.image}`}
-                      alt={featuredPost.author.name}
+                      src={`/abstract-geometric-shapes.png?height=40&width=40&`}
+                      alt="photo of author"
                       fill
                       className="object-cover"
                     />
                   </div>
                   <span className="font-medium">
-                    {featuredPost.author.name}
+                    Some Author
+                    {/* {featuredPost.author.name} */}
                   </span>
                 </div>
                 <Button className="group-hover:bg-gray-800">
@@ -224,8 +178,8 @@ export default function BlogPage() {
               <Link href={`/blog/${post.slug}`}>
                 <div className="aspect-[16/9] relative">
                   <Image
-                    src={`/abstract-geometric-shapes.png?height=400&width=600&query=${post.image}`}
-                    alt={post.title}
+                    src={`/abstract-geometric-shapes.png?height=400&width=600&query=${post.img_url}`}
+                    alt={post.img_alt || "image of watch"}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
@@ -237,14 +191,15 @@ export default function BlogPage() {
                     </span>
                     <div className="flex items-center text-xs text-gray-500">
                       <Clock className="h-3 w-3 mr-1" />
-                      {post.readTime}
+                      {post.read_time}
                     </div>
                   </div>
                   <CardTitle className="group-hover:text-gray-700">
                     {post.title}
                   </CardTitle>
                   <CardDescription className="text-xs text-gray-500">
-                    {post.date}
+                    {new Date().toLocaleDateString()}
+                    {/* {post.date} */}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

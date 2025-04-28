@@ -290,6 +290,118 @@ export async function seed(db: Kysely<DB>) {
     .execute();
 
   await db
+    .insertInto("blog_posts")
+    .values([
+      {
+        title: "The Renaissance of Mechanical Watchmaking in the Digital Age",
+        slug: "renaissance-mechanical-watchmaking",
+        excerpt:
+          "Despite the rise of smartwatches and digital technology, mechanical watches are experiencing a remarkable resurgence. We explore the factors driving this renaissance and why traditional horology continues to captivate enthusiasts worldwide.",
+        content:
+          "In this article, we take a deep dive into the revival of mechanical watchmaking, its cultural impact, and the enthusiasts fueling its growth.",
+        img_alt: "watchmaker working on mechanical watch movement with loupe",
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+        author_id: author.id,
+        category: "Trends",
+        read_time: "8 min read",
+        published_at: new Date("2023-06-05"),
+        featured: true
+      },
+      {
+        title: "The Art of Mechanical Movements",
+        slug: "art-of-mechanical-movements",
+        excerpt:
+          "Exploring the intricate craftsmanship behind today's finest mechanical watch movements and the centuries of tradition they represent.",
+        content:
+          "A closer look at the engineering brilliance and artisanal craftsmanship behind mechanical watch movements.",
+        img_alt: "close up of watch movement gears",
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+        author_id: author.id,
+        category: "Craftsmanship",
+        read_time: "6 min read",
+        published_at: new Date("2023-05-15")
+      },
+      {
+        title: "Investing in Luxury Watches",
+        slug: "investing-in-luxury-watches",
+        excerpt:
+          "How certain timepieces have become more than accessories, but valuable investment assets that appreciate over time.",
+        content:
+          "Luxury watches are increasingly viewed as investment vehicles. Here’s what collectors and investors should know.",
+        img_alt: "luxury watches displayed in collection case",
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+        author_id: author.id,
+        category: "Investment",
+        read_time: "5 min read",
+        published_at: new Date("2023-04-28")
+      },
+      {
+        title: "The Rise of Independent Watchmakers",
+        slug: "rise-of-independent-watchmakers",
+        excerpt:
+          "Discover the small ateliers creating some of the most innovative designs in horology, challenging the dominance of established brands.",
+        content:
+          "Independent watchmakers are making waves with unique designs and boundary-pushing innovations.",
+        img_alt: "watchmaker working at desk with tools",
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+        author_id: author.id,
+        category: "Industry",
+        read_time: "7 min read",
+        published_at: new Date("2023-04-10")
+      },
+      {
+        title: "Understanding Watch Complications",
+        slug: "understanding-watch-complications",
+        excerpt:
+          "A comprehensive guide to watch complications, from simple date displays to intricate perpetual calendars and minute repeaters.",
+        content:
+          "Let’s demystify watch complications and explore why they matter to collectors and horology lovers.",
+        img_alt: "complicated watch movement showing multiple complications",
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+        author_id: author.id,
+        category: "Education",
+        read_time: "9 min read",
+        published_at: new Date("2023-03-22")
+      },
+      {
+        title: "The History of Dive Watches",
+        slug: "history-of-dive-watches",
+        excerpt:
+          "From military necessity to style statement: tracing the evolution of the dive watch from its utilitarian origins to modern luxury.",
+        content:
+          "Dive into the history of dive watches, their military origins, and their transformation into fashion icons.",
+        img_alt: "vintage and modern dive watches side by side",
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+        author_id: author.id,
+        category: "History",
+        read_time: "6 min read",
+        published_at: new Date("2023-03-05")
+      },
+      {
+        title: "Watch Care and Maintenance",
+        slug: "watch-care-maintenance",
+        excerpt:
+          "Essential tips for keeping your timepiece in perfect condition, from daily care to professional servicing schedules.",
+        content:
+          "Watches require care and attention. Here's a guide to keeping yours ticking perfectly.",
+        img_alt: "watch being serviced by watchmaker",
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
+        author_id: author.id,
+        category: "Guides",
+        read_time: "4 min read",
+        published_at: new Date("2023-02-18")
+      }
+    ])
+    .execute();
+
+  await db
     .insertInto("related_blog_posts")
     .values({
       blog_post_id: blogPost.id,
