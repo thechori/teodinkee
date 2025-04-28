@@ -1,5 +1,7 @@
 import { Kysely, sql } from "kysely";
 import { DB } from "kysely-codegen";
+//
+import { productCategory } from "../data";
 
 export async function seed(db: Kysely<DB>) {
   // Clean tables
@@ -35,7 +37,7 @@ export async function seed(db: Kysely<DB>) {
       brand: "Rolex",
       price: 1299900,
       slug: "rolex-submariner",
-      category: "Dive Watches",
+      category: productCategory.DIVER,
       img_url:
         "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/diver-rolex-submariner-1G7eTveeomCLnlFqjx9BzCCbKVxgj0.webp",
       img_alt: "Rolex Submariner",
@@ -65,7 +67,7 @@ export async function seed(db: Kysely<DB>) {
       brand: "Omega",
       price: 575000,
       slug: "omega-seamaster",
-      category: "Dive Watches",
+      category: productCategory.SPORT,
       img_url:
         "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/aqua-explorer-omega-seamaster-aqua-terra-GXdlQ3IjUHMMUUKzAERhwaFvpk0ZAj.jpg",
       img_alt: "Omega Seamaster",
@@ -95,7 +97,7 @@ export async function seed(db: Kysely<DB>) {
       brand: "Tag Heuer",
       price: 660000,
       slug: "tag-heuer-carrera",
-      category: "Chronograph Watches",
+      category: productCategory.SPORT,
       img_url:
         "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/chronograph-tag-heuer-carrera-dw3TlG7JabCrnQoKb5h3T6yaBzlQQR.avif",
       img_alt: "Tag Heuer Carrera",
@@ -125,7 +127,7 @@ export async function seed(db: Kysely<DB>) {
       brand: "IWC",
       price: 1250000,
       slug: "iwc-big-pilot",
-      category: "Pilot Watches",
+      category: productCategory.PILOT,
       img_url:
         "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/pilot-chronometer-iwc-big-pilot-Trh3XiQTw0oFbH7wkQTeJ6CJ5j7vP5.avif",
       img_alt: "IWC Big Pilot",
@@ -250,7 +252,7 @@ export async function seed(db: Kysely<DB>) {
       img_url:
         "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-top-dive-watches-ieot2aYD39yUsQLxAfCSBIxFlwvykJ.avif",
       author_id: author.id,
-      category: "Reviews",
+      category: productCategory.DIVER,
       read_time: "5 min"
     })
     .returningAll()
@@ -268,7 +270,7 @@ export async function seed(db: Kysely<DB>) {
       img_url:
         "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-watches-under-1000-RNkFrWsOS3vJxVk4vOy8sso1yGjkYE.webp",
       author_id: author.id,
-      category: "Buying Guides",
+      category: productCategory.BUDGET,
       read_time: "4 min"
     })
     .returningAll()
@@ -286,7 +288,7 @@ export async function seed(db: Kysely<DB>) {
       img_url:
         "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-john-mayer-watches-ABqZgoMSCc7m39ol4dRCGzD7B2rzXT.webp",
       author_id: author.id,
-      category: "Fun Piece",
+      category: productCategory.PILOT,
       read_time: "2 min"
     })
     .returningAll()
@@ -306,7 +308,7 @@ export async function seed(db: Kysely<DB>) {
         img_url:
           "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
         author_id: author.id,
-        category: "Trends",
+        category: productCategory.CLASSIC,
         read_time: "8 min read",
         published_at: new Date("2023-06-05")
       },
@@ -321,7 +323,7 @@ export async function seed(db: Kysely<DB>) {
         img_url:
           "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
         author_id: author.id,
-        category: "Craftsmanship",
+        category: productCategory.CLASSIC,
         read_time: "6 min read",
         published_at: new Date("2023-05-15")
       },
@@ -336,7 +338,7 @@ export async function seed(db: Kysely<DB>) {
         img_url:
           "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
         author_id: author.id,
-        category: "Investment",
+        category: productCategory.LUXURY,
         read_time: "5 min read",
         published_at: new Date("2023-04-28")
       },
@@ -366,7 +368,7 @@ export async function seed(db: Kysely<DB>) {
         img_url:
           "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
         author_id: author.id,
-        category: "Education",
+        category: productCategory.LUXURY,
         read_time: "9 min read",
         published_at: new Date("2023-03-22")
       },
@@ -381,22 +383,21 @@ export async function seed(db: Kysely<DB>) {
         img_url:
           "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
         author_id: author.id,
-        category: "History",
+        category: productCategory.DIVER,
         read_time: "6 min read",
         published_at: new Date("2023-03-05")
       },
       {
-        title: "Watch Care and Maintenance",
-        slug: "watch-care-maintenance",
-        excerpt:
-          "Essential tips for keeping your timepiece in perfect condition, from daily care to professional servicing schedules.",
+        title: "Flying High - The Air Force's Choice",
+        slug: "air-force-choice",
+        excerpt: "See why the USAF chose these watches for combat.",
         content:
           "Watches require care and attention. Here's a guide to keeping yours ticking perfectly.",
         img_alt: "watch being serviced by watchmaker",
         img_url:
           "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/blog-post-generic-photo-vKvix5ahw8940VazsftkU6pmlFKflQ.jpeg",
         author_id: author.id,
-        category: "Guides",
+        category: productCategory.PILOT,
         read_time: "4 min read",
         published_at: new Date("2023-02-18")
       }
