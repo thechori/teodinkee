@@ -51,8 +51,46 @@ async function getLocations() {
 }
 
 export default async function AboutPage() {
-  const teamMembers = await getTeamMembers();
-  const locations = await getLocations();
+  const teamMembers = [
+    {
+      name: "Thomas Dinkee",
+      title: "Founder & Master Watchmaker",
+      bio: "With over 30 years of experience in haute horlogerie, Thomas founded Teodinkee to create timepieces that blend traditional craftsmanship with contemporary design.",
+      image: "professional older man with glasses in workshop"
+    },
+    {
+      name: "Elena Rousseau",
+      title: "Head of Design",
+      bio: "A graduate of the prestigious École d'Art et de Design in Geneva, Elena brings a unique artistic vision to Teodinkee's collections, balancing aesthetics with functionality.",
+      image: "professional woman with dark hair in design studio"
+    },
+    {
+      name: "Marcus Chen",
+      title: "Technical Director",
+      bio: "With a background in mechanical engineering and traditional watchmaking, Marcus oversees the development and production of our in-house movements.",
+      image: "asian man in professional attire examining watch"
+    }
+  ];
+  const locations = [
+    {
+      city: "Geneva",
+      address: "14 Rue du Rhône\nGeneva, Switzerland",
+      hours: "Monday - Saturday: 10am - 7pm\nSunday: Closed",
+      image: "luxury watch boutique in geneva"
+    },
+    {
+      city: "New York",
+      address: "121 Spring Street\nNew York, NY 10012",
+      hours: "Monday - Saturday: 11am - 8pm\nSunday: 12pm - 6pm",
+      image: "luxury watch boutique in new york"
+    },
+    {
+      city: "Tokyo",
+      address: "5-2-1 Ginza\nChuo City, Tokyo 104-0061",
+      hours: "Monday - Sunday: 10am - 7pm",
+      image: "luxury watch boutique in tokyo"
+    }
+  ];
 
   return (
     <div className="min-h-screen pt-24 pb-16">
