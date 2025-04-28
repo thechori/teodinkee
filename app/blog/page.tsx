@@ -49,7 +49,6 @@ export default function BlogPage() {
         const response = await fetch("/api/blog");
         if (!response.ok) throw new Error("Failed to fetch blogPosts");
         const data = await response.json();
-        console.log("data", data);
         setBlogPosts(data);
       } catch (error) {
         console.error("Error loading featured blogPosts:", error);
@@ -175,46 +174,48 @@ export default function BlogPage() {
 
         {/* Blog Posts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogPosts.map((post) => (
-            <Card key={post.slug} className="overflow-hidden group">
-              <Link href={`/blog/${post.slug}`}>
-                <div className="aspect-[16/9] relative">
-                  <Image
-                    src={`${post.img_url}?height=600&width=900`}
-                    alt={post.img_alt || post.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <CardHeader className="pb-2">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs font-medium px-2.5 py-0.5 bg-gray-100 rounded">
-                      {post.category}
-                    </span>
-                    <div className="flex items-center text-xs text-gray-500">
-                      <Clock className="h-3 w-3 mr-1" />
-                      {post.read_time}
-                    </div>
+          {blogPosts
+            .filter((_, index) => index !== 0)
+            .map((post) => (
+              <Card key={post.slug} className="overflow-hidden group">
+                <Link href={`/blog/${post.slug}`}>
+                  <div className="aspect-[16/9] relative">
+                    <Image
+                      src={`${post.img_url}?height=600&width=900`}
+                      alt={post.img_alt || post.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
                   </div>
-                  <CardTitle className="group-hover:text-gray-700">
-                    {post.title}
-                  </CardTitle>
-                  <CardDescription className="text-xs text-gray-500">
-                    {new Date().toLocaleDateString()}
-                    {/* {post.date} */}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">{post.excerpt}</p>
-                </CardContent>
-                <CardFooter>
-                  <span className="text-sm font-medium flex items-center">
-                    Read More <ArrowRight className="ml-2 h-4 w-4" />
-                  </span>
-                </CardFooter>
-              </Link>
-            </Card>
-          ))}
+                  <CardHeader className="pb-2">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-xs font-medium px-2.5 py-0.5 bg-gray-100 rounded">
+                        {post.category}
+                      </span>
+                      <div className="flex items-center text-xs text-gray-500">
+                        <Clock className="h-3 w-3 mr-1" />
+                        {post.read_time}
+                      </div>
+                    </div>
+                    <CardTitle className="group-hover:text-gray-700">
+                      {post.title}
+                    </CardTitle>
+                    <CardDescription className="text-xs text-gray-500">
+                      {new Date().toLocaleDateString()}
+                      {/* {post.date} */}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">{post.excerpt}</p>
+                  </CardContent>
+                  <CardFooter>
+                    <span className="text-sm font-medium flex items-center">
+                      Read More <ArrowRight className="ml-2 h-4 w-4" />
+                    </span>
+                  </CardFooter>
+                </Link>
+              </Card>
+            ))}
         </div>
 
         {/* Pagination */}
