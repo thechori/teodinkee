@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { usePathname } from "next/navigation";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -28,9 +29,11 @@ const navigation = [
 
 export default function Header() {
   const isMobile = useMobile();
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { data: session } = useSession();
+  const isNotHome = pathname !== "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -64,7 +67,9 @@ export default function Header() {
           <Link href="/" className="flex items-center">
             <span
               className={`font-serif text-2xl font-bold ${
-                isScrolled || isMobile ? "text-black" : "text-white"
+                isScrolled || isMobile || isNotHome
+                  ? "text-black"
+                  : "text-white"
               }`}
             >
               Teodinkee
@@ -78,7 +83,7 @@ export default function Header() {
                 key={item.name}
                 href={item.href}
                 className={`text-sm font-medium transition-colors ${
-                  isScrolled
+                  isScrolled || isNotHome
                     ? "text-gray-700 hover:text-black"
                     : "text-white/90 hover:text-white"
                 }`}
@@ -96,7 +101,9 @@ export default function Header() {
                 variant="ghost"
                 size="icon"
                 className={
-                  isScrolled || isMobile ? "text-gray-700" : "text-white"
+                  isScrolled || isMobile || isNotHome
+                    ? "text-gray-700"
+                    : "text-white"
                 }
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
               >
@@ -133,7 +140,9 @@ export default function Header() {
                     variant="ghost"
                     size="icon"
                     className={
-                      isScrolled || isMobile ? "text-gray-700" : "text-white"
+                      isScrolled || isMobile || isNotHome
+                        ? "text-gray-700"
+                        : "text-white"
                     }
                   >
                     <Avatar className="h-8 w-8">
@@ -188,7 +197,9 @@ export default function Header() {
                 variant="ghost"
                 size="icon"
                 className={
-                  isScrolled || isMobile ? "text-gray-700" : "text-white"
+                  isScrolled || isMobile || isNotHome
+                    ? "text-gray-700"
+                    : "text-white"
                 }
                 asChild
               >
@@ -204,7 +215,9 @@ export default function Header() {
               variant="ghost"
               size="icon"
               className={
-                isScrolled || isMobile ? "text-gray-700" : "text-white"
+                isScrolled || isMobile || isNotHome
+                  ? "text-gray-700"
+                  : "text-white"
               }
               asChild
             >
