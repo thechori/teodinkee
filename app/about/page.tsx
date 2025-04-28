@@ -18,38 +18,6 @@ type Location = {
   image: string;
 };
 
-async function getTeamMembers() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || ""}/api/about/team`,
-      {
-        cache: "no-store"
-      }
-    );
-    if (!res.ok) return [];
-    return await res.json();
-  } catch (error) {
-    console.error("Error fetching team members:", error);
-    return [];
-  }
-}
-
-async function getLocations() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || ""}/api/about/locations`,
-      {
-        cache: "no-store"
-      }
-    );
-    if (!res.ok) return [];
-    return await res.json();
-  } catch (error) {
-    console.error("Error fetching locations:", error);
-    return [];
-  }
-}
-
 export default async function AboutPage() {
   const teamMembers = [
     {

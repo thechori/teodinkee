@@ -1,31 +1,33 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Products } from "kysely-codegen";
 
-async function getRelatedProducts(productId: number) {
-  try {
-    const response = await fetch(
-      `${
-        process.env.NEXT_PUBLIC_API_URL || ""
-      }/api/products/${productId}/related`,
-      {
-        cache: "no-store"
-      }
-    );
-    if (!response.ok) return [];
-    const data = await response.json();
-    return data.products || [];
-  } catch (error) {
-    console.error("Error fetching related products:", error);
-    return [];
-  }
-}
+// async function getRelatedProducts(productId: number) {
+//   try {
+//     const response = await fetch(
+//       `${
+//         process.env.NEXT_PUBLIC_API_URL || ""
+//       }/api/products/${productId}/related`,
+//       {
+//         cache: "no-store"
+//       }
+//     );
+//     if (!response.ok) return [];
+//     const data = await response.json();
+//     return data.products || [];
+//   } catch (error) {
+//     console.error("Error fetching related products:", error);
+//     return [];
+//   }
+// }
 
 export default async function RelatedProducts({
   productId
 }: {
   productId: number;
 }) {
-  const relatedProducts = await getRelatedProducts(productId);
+  const relatedProducts: Products[] = [];
+  // const relatedProducts = await getRelatedProducts(productId);
 
   if (relatedProducts.length === 0) {
     return null;
