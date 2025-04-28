@@ -23,7 +23,7 @@ type Props = {
 };
 
 export default function BlogPostPage() {
-  const [post, setPost] = useState<any>(null);
+  const [post, setPost] = useState<BlogPosts | null>(null);
   const [loading, setLoading] = useState(true);
 
   const { slug } = useParams();
