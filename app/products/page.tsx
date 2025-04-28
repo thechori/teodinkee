@@ -22,6 +22,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { db } from "@/lib/db";
+import { productCategory } from "@/data";
 
 async function getProducts() {
   try {
@@ -64,7 +65,7 @@ export default async function ProductsPage() {
               <div>
                 <h3 className="font-medium mb-3">Categories</h3>
                 <div className="space-y-2">
-                  {["All", "Luxury", "Sport", "Classic"].map((category) => (
+                  {Object.values(productCategory).map((category) => (
                     <div key={category} className="flex items-center space-x-2">
                       <Checkbox id={`category-${category.toLowerCase()}`} />
                       <label
