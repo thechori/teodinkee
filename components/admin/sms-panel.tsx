@@ -121,6 +121,7 @@ export default function AdminSmsPanel() {
     setSending(selectedSmsType);
 
     try {
+      // Note: simply GET for demo
       const response = await fetch("/api/sms", {
         method: "GET"
         // method: "POST",

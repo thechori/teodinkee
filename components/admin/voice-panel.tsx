@@ -132,16 +132,18 @@ export default function AdminVoicePanel() {
     setDispatching(selectedCallType);
 
     try {
+      // Note: simply GET for demo
       const response = await fetch("/api/voice", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          callType: selectedCallType,
-          script,
-          audience
-        })
+        method: "GET"
+        // method: "POST",
+        // headers: {
+        //   "Content-Type": "application/json"
+        // },
+        // body: JSON.stringify({
+        //   callType: selectedCallType,
+        //   script,
+        //   audience
+        // })
       });
 
       const result = await response.json();
@@ -158,7 +160,8 @@ export default function AdminVoicePanel() {
           });
         }
       } else {
-        toast.error(result.message);
+        console.error("ERROR", result);
+        toast.error(result.message || "Success!");
       }
     } catch (error) {
       toast.error(
