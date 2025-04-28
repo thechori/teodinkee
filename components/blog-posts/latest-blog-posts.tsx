@@ -17,7 +17,6 @@ const LatestBlogPosts = () => {
         const response = await fetch("/api/blog");
         if (!response.ok) throw new Error("Failed to fetch blogPosts");
         const data = await response.json();
-        console.log("data", data);
         setBlogPosts(data);
       } catch (error) {
         console.error("Error loading featured blogPosts:", error);

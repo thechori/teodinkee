@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import FeaturedProducts from "@/components/product/featured-products";
 import NewsletterSignup from "@/components/newsletter-signup";
 import LatestBlogPosts from "@/components/blog-posts/latest-blog-posts";
+import FeaturedCollections from "@/components/collections/featured-collections";
 
 export default function HomePage() {
   return (
@@ -57,48 +58,8 @@ export default function HomePage() {
           <h2 className="text-3xl font-serif font-bold text-center mb-12">
             Explore Our Collections
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Luxury",
-                image: "luxury watch with gold details",
-                description: "Timeless elegance for the discerning collector"
-              },
-              {
-                name: "Sport",
-                image: "sporty chronograph watch",
-                description: "Precision engineering for the active lifestyle"
-              },
-              {
-                name: "Classic",
-                image: "classic minimalist watch",
-                description: "Understated sophistication for everyday wear"
-              }
-            ].map((category) => (
-              <Link
-                href={`/products?category=${category.name.toLowerCase()}`}
-                key={category.name}
-                className="group relative overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-              >
-                <div className="aspect-[4/5] relative">
-                  <Image
-                    src={`/abstract-geometric-shapes.png?height=600&width=480&query=${category.image}`}
-                    alt={category.name}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
-                    <h3 className="text-xl font-medium text-white mb-2">
-                      {category.name}
-                    </h3>
-                    <p className="text-white/80 mb-4">{category.description}</p>
-                    <span className="text-white flex items-center text-sm font-medium">
-                      Discover <ArrowRight className="ml-2 h-4 w-4" />
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
+          <div>
+            <FeaturedCollections />
           </div>
         </div>
       </section>

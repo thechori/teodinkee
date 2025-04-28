@@ -132,13 +132,36 @@ export async function seed(db: Kysely<DB>) {
   // Collections
   const [collection] = await db
     .insertInto("collections")
-    .values({
-      name: "Luxury Dive Watches",
-      description: "Best dive watches in the market",
-      img_url:
-        "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/collection-divers-yFFBtE3QdRjst3teACszuf8XafEgKF.png",
-      img_alt: "Dive Watch Collection"
-    })
+    .values([
+      {
+        name: "Luxury Watches",
+        description: "The most luxurious watches on the market",
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/collections-luxury-HAuXsLBljZEPdWpj6C6OPeXpJHSlMo.png",
+        img_alt: "Luxury Watch Collection"
+      },
+      {
+        name: "Sport Watches",
+        description: "For people that crave to move",
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/collections-sport-5AnScCg97uIO5AU5VDAS9risc35pGb.png",
+        img_alt: "Sport Watch Collection"
+      },
+      {
+        name: "Classic Watches",
+        description: "When versatility you just want to get back to the basics",
+        img_url:
+          "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/collections-classic-3wEW0tQopnJf9FRSkov9KwKkEBWHjp.png",
+        img_alt: "Classic Watch Collection"
+      }
+      // {
+      //   name: "Diving Watches",
+      //   description: "Best dive watches in the market",
+      //   img_url:
+      //     "https://rhvc6oqjdslrsx4e.public.blob.vercel-storage.com/images/collection-divers-yFFBtE3QdRjst3teACszuf8XafEgKF.png",
+      //   img_alt: "Dive Watch Collection"
+      // },
+    ])
     .returningAll()
     .execute();
 
