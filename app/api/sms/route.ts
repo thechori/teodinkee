@@ -12,7 +12,7 @@ export async function GET() {
     // send all customers sms
     const res = await twilioClient.messages.create({
       body: "IT'S ON! Your weekly Teodinkee flash coupon is live for the next hour. Hurry up and claim it now! 5% off with code 'FS12251'",
-      to: "+18326460869",
+      to: "",
       from: env.TWILIO_SENDER_PHONE_NUMBER // Twilio provided number
     });
 

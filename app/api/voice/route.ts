@@ -15,7 +15,7 @@ export async function GET() {
 
     //  NOTE: 500 - VOICE CALLING DEACTIVATED FOR MY ACCOUNT
     const call = await twilioClient.calls.create({
-      to: "+18326460869",
+      to: "",
       from: env.TWILIO_SENDER_PHONE_NUMBER, // Twilio provided number
       twiml
     });
